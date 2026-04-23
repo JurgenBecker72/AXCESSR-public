@@ -159,6 +159,22 @@ The figure below illustrates the intersection structure of response quality flag
 
 The majority of flagged candidates (144) were caught by the speeder criterion alone, with boundary overuse the second most common single flag (114). Co-occurring flags - where the same candidate triggered multiple criteria independently - account for 114 of the 388 flagged candidates, providing convergent evidence of low engagement in those cases.
 
+#### Comparison
+
+Figure X. Comparison of Person-Level Variance in the Flagged and Clean Sample
+
+| Person-Level Variance in the Flagged Sample (N = 388) | Person-Level Variance in the Clean Sample (N = 1628 |
+|--------|--------|
+| <img width="400" height="280" alt="image" src="https://github.com/user-attachments/assets/27fd52c5-c121-4bd6-bc11-8f8951d6b42b" />|<img width="400" height="280" alt="image" src="https://github.com/user-attachments/assets/29f473f9-8214-4c90-9ec1-04cc975e63a5" />|
+
+To better understand how flagged respondents differ from the rest of the sample, the figure below compares score distributions across key domains. Density curves are shown for both clean and flagged groups, allowing for a direct visual comparison of their response patterns.
+
+Figure X. Comparison of Score Distributions Between the Flagged and Clean Sample
+
+<img width="787" height="486" alt="image" src="https://github.com/user-attachments/assets/fffb0a15-6aa6-4e0c-bd23-d82b8105487d" />
+
+This comparison shows that respondents with quality flags exhibit noticeably different score patterns, with several domains displaying irregular or bimodal distributions. In contrast, the clean sample appears more stable and closer to expected distributional shapes. This divergence suggests that flagged responses may introduce noise or distortion, reinforcing the importance of removing or carefully reviewing suspicious respondents to maintain analytical rigor.
+
 ### **5) Decision Engine**
 
 Candidate responses are scored against the revised 206-item instrument, aggregated across the four risk domains using a weighted composite approach, and converted to a total risk score on a standardised 0–1 scale. Candidates scoring below the 0.30 threshold are classified as lower risk and enter the funding consideration pool.
