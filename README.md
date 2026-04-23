@@ -102,7 +102,7 @@ The bar chart confirms that distributional shift is concentrated in the Values d
 
 Figure 5. Score Distributions: V1 (247 items) vs V2 (206 items)
 
-<img width="1800" height="1080" alt="psi_density" src="https://github.com/user-attachments/assets/f9b0b177-9862-4e36-95c9-4921eb750c1e" />
+<img width="1000" height="700" alt="image" src="https://github.com/user-attachments/assets/86baa70b-d8af-40f3-a3b5-350f5f75309f" />
 
 The density curves corroborate the PSI findings. For Emotion Traits and Personality, the V1 and V2 distributions are almost indistinguishable. Emotion States and Total Risk show a slight tightening of the distribution in V2 - consistent with the removal of noisy items reducing score variance. The Values domain shows the most visible shift, with the V2 distribution marginally narrower and shifted slightly rightward, reflecting the influence of the removed items on the lower end of the score range. Across all domains, the core shape of the distribution is preserved, confirming that the revised instrument measures the same underlying constructs in a substantively equivalent way.
 
@@ -116,7 +116,7 @@ Completion time provides a useful lens through which to examine candidate engage
 
 Figure 6. Total Time Taken Distribution
 
-<img width="787" height="486" alt="image" src="https://github.com/user-attachments/assets/5b74b661-ccc0-4356-b3c8-239162a630b8" />
+<img width="550" height="300" alt="image" src="https://github.com/user-attachments/assets/5b74b661-ccc0-4356-b3c8-239162a630b8" />
 
 Completion times ranged from 39 seconds to nearly two hours (7155 seconds), with a median of 1834 seconds (~30 minutes) and a mean of 2043 seconds (~34 minutes). The central bulk of candidates fell between the first and third quartiles (1372–2525 seconds), indicating a typical completion window of 23–42 minutes. The right‑skewed distribution reflects a small group of candidates who took substantially longer, while the left tail captures the ~10% of speeders flagged for accelerated completion. This pattern underscores that the majority of candidates engaged at a reasonable pace, but a notable minority exhibited atypical response behaviour consistent with low engagement.
 
@@ -124,9 +124,9 @@ Completion times ranged from 39 seconds to nearly two hours (7155 seconds), with
 
 Person-level standard deviations offer a useful perspective on response consistency across the assessment. Higher variability can indicate differentiated responding across items, while unusually low variability may suggest patterned or inattentive answering. The histogram below displays the distribution of standard deviations across all respondents.
 
-Figure X. Person-Level Variance Distribution
+Figure 7. Person-Level Variance Distribution
 
-<img width="787" height="486" alt="image" src="https://github.com/user-attachments/assets/bd4bf96c-e4a8-4f3b-b709-dc5e3f0738b7" />
+<img width="550" height="300" alt="image" src="https://github.com/user-attachments/assets/bd4bf96c-e4a8-4f3b-b709-dc5e3f0738b7" />
 
 Person-level standard deviations ranged from 0.00 to 0.499, with a median of 0.345 and a mean of 0.333. The middle 50% of respondents fell between 0.291 and 0.393, indicating a typical band of moderate response variability. The distribution is slightly left-skewed, with most respondents clustering between approximately 0.30 and 0.40, and a thinner tail extending toward very low values. This lower tail suggests a small subset of respondents with minimal variation in their answers, potentially reflecting uniform or inattentive responding. Overall, the pattern indicates that most respondents demonstrated a reasonable degree of variability, consistent with engaged and differentiated answering, while a minority exhibited atypical response patterns.
 
@@ -151,7 +151,7 @@ Table 3. Summary of Response Quality Flags
 
 *Boundary overuse* — proportion of zero responses exceeding 0.28 or proportion of one responses exceeding 0.50, both derived from the 95th percentile. 
 
-Figure X. Response Quality Flag 
+Figure 8. Response Quality Flag 
 
 The figure below illustrates the intersection structure of response quality flags across the 388 flagged candidates. Each bar represents a unique combination of criteria, with bar height indicating the number of candidates flagged by that particular combination.
 
@@ -161,17 +161,21 @@ The majority of flagged candidates (144) were caught by the speeder criterion al
 
 #### Comparison
 
-Figure X. Comparison of Person-Level Variance in the Flagged and Clean Sample
+To assess differences in response consistency between groups, the figure below compares person-level variance for respondents flagged on quality checks versus those retained in the clean sample. Examining variability at the individual level provides insight into how consistently participants engaged with the assessment items.
+
+Figure 9. Comparison of Person-Level Variance in the Flagged and Clean Sample
 
 | Person-Level Variance in the Flagged Sample (N = 388) | Person-Level Variance in the Clean Sample (N = 1628 |
 |--------|--------|
 | <img width="400" height="280" alt="image" src="https://github.com/user-attachments/assets/27fd52c5-c121-4bd6-bc11-8f8951d6b42b" />|<img width="400" height="280" alt="image" src="https://github.com/user-attachments/assets/29f473f9-8214-4c90-9ec1-04cc975e63a5" />|
 
+The flagged sample (N = 388) shows a broader and more irregular spread of person-level variance, including a noticeable concentration of lower-variance cases. In contrast, the clean sample (N = 1628) exhibits a more stable and tightly clustered distribution, suggesting more consistent and differentiated responding.
+
 To better understand how flagged respondents differ from the rest of the sample, the figure below compares score distributions across key domains. Density curves are shown for both clean and flagged groups, allowing for a direct visual comparison of their response patterns.
 
 Figure X. Comparison of Score Distributions Between the Flagged and Clean Sample
 
-<img width="787" height="486" alt="image" src="https://github.com/user-attachments/assets/fffb0a15-6aa6-4e0c-bd23-d82b8105487d" />
+<img width="787" height="486" alt="image" src="https://github.com/user-attachments/assets/07d91c35-5a24-4667-9f1b-fc0b9e4d2e8b" />
 
 This comparison shows that respondents with quality flags exhibit noticeably different score patterns, with several domains displaying irregular or bimodal distributions. In contrast, the clean sample appears more stable and closer to expected distributional shapes. This divergence suggests that flagged responses may introduce noise or distortion, reinforcing the importance of removing or carefully reviewing suspicious respondents to maintain analytical rigor.
 
@@ -181,4 +185,4 @@ Candidate responses are scored against the revised 206-item instrument, aggregat
 
 The engine supports computerised adaptive testing (CAT), whereby item selection is determined dynamically on the basis of prior responses — concentrating measurement precision where it is most needed and reducing burden where sufficient information has already been obtained.
 
-AXCESSR demonstrates that rigorous psychometric methodology and scalable product engineering are not competing priorities. Each stage of development — from construct mapping to adaptive item delivery — was data-informed, and each data decision shaped the product.
+AXCESSR demonstrates that rigorous psychometric methodology and scalable product engineering are not competing priorities. Each stage of development - from construct mapping to adaptive item delivery - was data-informed, and each data decision shaped the product.
