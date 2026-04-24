@@ -1,6 +1,6 @@
-<img width="349" height="81" alt="image" src="https://github.com/user-attachments/assets/58a8d653-b87b-4156-a8ed-00e226f17f44" /># **AXCESSR**
+# **AXCESSR**
 
-<img width="150" height="150" alt="AXCESSR_logo" src="https://github.com/user-attachments/assets/4813ad88-46e5-4406-981d-71dbe98f8c66" />
+<img width="150" height="150" alt="AXCESSR_logo" src="https://github.com/user-attachments/assets/e00f04a0-dce2-4dc4-942c-2d60c8ea33af" />
 
 ## **Introduction**
 
