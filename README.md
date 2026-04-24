@@ -110,6 +110,22 @@ The density curves corroborate the PSI findings. For Emotion Traits and Personal
 
 Psychometric rigour is a necessary but insufficient condition for a viable assessment product. UX research was conducted alongside validation to evaluate the candidate-facing experience and identify response variability attributable to presentation rather than construct variance.
 
+*Table 3. UX MEtrics Summary*
+
+| Metric | Explanation |
+|-------------------|-----------------------------------------------------|
+| Time Taken | Total time a respondent spends completing the assessment. Unusually short times may indicate rushing; unusually long times may reflect connectivity issues or disengagement. |
+| Response variance | The degree of variation in answers across items. Low variance may signal disengagement (e.g., straight-lining responses). |
+| Long String Responding | The occurrence of consecutive identical responses across items. A strong behavioural indicator of disengagement or deliberate faking. |
+| Boundary Overuse | Systematic overuse of extreme response options (e.g., always selecting 0 or 1). Suggests acquiescence bias, satisficing, or deliberate manipulation of scores. |
+| Completion rate | The percentage of respondents who finish the assessment once they start. A high rate suggests the test feels manageable and engaging. |
+| Click-through rate | The proportion of users who proceed from one section or item to the next. Indicates how intuitive and motivating the flow of the assessment is. |
+| Drop-off point | The item or section where respondents most often quit. Helps identify where fatigue or frustration sets in. |
+| Inter-item RT consistency | Consistency in response times across items. Large fluctuations can indicate faking, guessing, or loss of attention. |
+| Onset of disengagement | The point in the assessment where behavioral signals (e.g., long strings, extreme responding, rapid completion) begin to appear. Shows when users start losing focus. |
+| Platform Load Time | The average time it takes for each page or item to load. Longer load times can frustrate users and reduce engagement. |
+| Connectivity Drop Events | The number of times users lose connection or experience interruptions during the assessment. Frequent drops can harm the user experience and affect data quality. |
+
 ##### Completion Times
 
 Completion time provides a useful lens through which to examine candidate engagement. While most respondents worked steadily through the assessment, a subset completed unusually quickly, raising concerns about inattentive responding. The histogram below illustrates the spread of completion times across the full sample.
@@ -134,7 +150,7 @@ Person-level standard deviations ranged from 0.00 to 0.499, with a median of 0.3
 
 An initial sample of N = 2016 candidates completed the assessment. Prior to scoring, all responses were screened for indicators of low engagement using four data-driven criteria: accelerated completion (speeders), invariant responding (low variance), consecutive identical responses (long-string), and extreme endpoint selection (boundary overuse). The following table summarises the findings.
 
-*Table 3. Summary of Response Quality Flags*
+*Table 4. Summary of Response Quality Flags*
 
 | Quality Flag | Criterion | Count | Percentage |
 |---|---|:---:|:---:|
