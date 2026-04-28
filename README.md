@@ -31,7 +31,9 @@ The pipeline above illustrates the three core development phases of AXCESSR - fr
 
 AXCESSR is a psychometric-based credit risk assessment platform designed to extend financial access to individuals overlooked by traditional credit origination methods - either due to limited credit history or an overestimation of risk based on conventional metrics. Rather than relying on historical financial data, the platform evaluates creditworthiness through the measurement of stable personal dispositions shown to predict financial decision-making and repayment behaviour.
 
-*Figure 2. The Problem*
+Figma Conceptualisation Presentation Link -> https://www.figma.com/deck/BWVGJvpN2KeOfJEtiEwUf5
+
+*Figure 2. The Funding Access Gap*
 
 <img width="368" height="343" alt="image" src="https://github.com/user-attachments/assets/2ea18234-df5a-4bdd-be35-c5864e69655a" />
 
@@ -50,6 +52,8 @@ Four core psychological domains were identified through a review of the behaviou
 
 <img width="500" height="300" alt="AXCESSR Structure V2" src="https://github.com/user-attachments/assets/42385684-f9c1-4988-953e-37cf6ff5a297" />
 
+With the domain structure established theoretically, the next challenge was operationalisation - translating abstract constructs into measurable, defensible items
+
 #### Item Development
 
 Item development drew on a structured review of established psychometric frameworks, adapting content from validated instruments across each risk domain. Source instruments included the International Personality Item Pool (IPIP), the HEXACO Personality Inventory, the Schwartz Value Survey (SVS), the Trait Emotional Intelligence Questionnaire (TEIQue), the Short Dark Triad (SD3), the Edwards Compulsive Buying Scale (ECBS), the Barratt Impulsivity Scale, the Sensation Seeking Scale, and the UPPS Impulsive Behaviour Scale.
@@ -62,7 +66,7 @@ The below figure illustrates the diverse psychological frameworks and reputable 
 
 Every item in the AXCESSR pool traces back to a documented psychological construct. Items were not written opportunistically - each one was derived from a defined theoretical basis and subjected to a structured development pipeline before inclusion in the instrument.
 
-*Figure 5. Item Creation*
+*Figure 5.  Item Development Structure*
 
 <img width="614" height="414" alt="image" src="https://github.com/user-attachments/assets/cf785e31-070e-4ad7-b0a8-3a25dbd294e2" />
 
@@ -102,7 +106,7 @@ Convergent evidence across multiple methods led to the removal of 41 items, resu
 
 **Summary of Problematic items**
 
-*Table 2. Summary of Problmeatic Items*
+*Table 2. Summary of Problematic Items*
 
 | Diagnostic | Total | Personality | Values | Emotion Traits | Emotion States |
 |---|:---:|:---:|:---:|:---:|:---:|
@@ -133,6 +137,8 @@ A key question following item removal is whether the revised instrument produces
 
 The PSI results indicate that item removal had minimal impact on candidate risk classifications across most domains. Four of five scores fall within the stable range (PSI < 0.10), with Emotion Traits Risk showing negligible shift (PSI = 0.004) and Personality Risk and Emotion States Risk both well within acceptable bounds. The moderate shift observed in Values Risk (PSI = 0.19) is notable given that only 9 items were removed from this domain - suggesting those items were disproportionately influential in shaping the score distribution. Critically, no domain exceeds the intervention threshold of 0.25.
 
+The domain-level breakdown reveals where revision had the most structural impact.
+
 *Figure 7. Population Stability Index (PSI) by Domain*
 
 <img width="1000" height="600" alt="psi_bar" src="https://github.com/user-attachments/assets/4bdf8c89-24bb-4ce2-993e-9958f345b302" />
@@ -145,9 +151,11 @@ The bar chart confirms that distributional shift is concentrated in the Values d
 
 The density curves corroborate the PSI findings. For Emotion Traits and Personality, the V1 and V2 distributions are almost indistinguishable. Emotion States and Total Risk show a slight tightening of the distribution in V2 - consistent with the removal of noisy items reducing score variance. The Values domain shows the most visible shift, with the V2 distribution marginally narrower and shifted slightly rightward, reflecting the influence of the removed items on the lower end of the score range. Across all domains, the core shape of the distribution is preserved, confirming that the revised instrument measures the same underlying constructs in a substantively equivalent way.
 
+Statistical validity confirms the instrument measures what it claims to. UX research addresses a separate question: will candidates actually engage with it honestly and completely?
+
 ### **3) UX Research**
 
-Psychometric rigour is a necessary but insufficient condition for a viable assessment product. UX research was conducted alongside validation to evaluate the candidate-facing experience and identify response variability attributable to presentation rather than construct variance.
+Psychometric rigour is a necessary but insufficient condition for a viable assessment product. A well-constructed instrument that candidates disengage from, rush through, or abandon produces compromised data - and compromised data produces unreliable scores. UX research was therefore not a supplementary workstream: it was a data quality intervention. Conducted alongside validation, the research was designed to identify response variability attributable to presentation rather than construct variance - and to use those findings to drive design decisions that optimise the candidate experience and, by extension, the integrity of the data it generates. Every UX metric collected was treated as a signal: evidence of where the instrument was working, where it was creating friction, and where design changes could recover response quality without touching the psychometric structure.
 
 #### A|B Testing
 
@@ -253,6 +261,8 @@ The dumbbell chart below provides a single consolidated view of improvement acro
 
 <img width="1920" height="1344" alt="image" src="https://github.com/user-attachments/assets/04596745-9d24-43b0-a352-caed30c9d089" />
 
+Beyond aggregate UX metrics, individual response patterns were examined to identify candidates whose data quality may compromise scoring integrity.
+
 #### **Response Quality Screening**
 
 An initial sample of N = 2016 candidates completed the assessment. Prior to scoring, all responses were screened for indicators of low engagement using four data-driven criteria: accelerated completion (speeders), invariant responding (low variance), consecutive identical responses (long-string), and extreme endpoint selection (boundary overuse). The following table summarises the findings.
@@ -276,7 +286,7 @@ An initial sample of N = 2016 candidates completed the assessment. Prior to scor
 
 The figure below illustrates the intersection structure of response quality flags across the 388 flagged candidates. Each bar represents a unique combination of criteria, with bar height indicating the number of candidates flagged by that particular combination.
 
-*Figure 13. Response Quality Flag*
+*Figure 13. Intersection of Response Quality Flags Across Flagged Candidates*
 
 <img width="787" height="486" alt="image" src="https://github.com/user-attachments/assets/a6fd24f8-7957-48cd-82c6-04a89e086db6" />
 
@@ -302,3 +312,14 @@ To better understand how flagged respondents differ from the rest of the sample,
 
 This comparison shows that respondents with quality flags exhibit noticeably different score patterns, with several domains displaying irregular or bimodal distributions. In contrast, the clean sample appears more stable and closer to expected distributional shapes. This divergence suggests that flagged responses may introduce noise or distortion, reinforcing the importance of removing or carefully reviewing suspicious respondents to maintain analytical rigor.
 
+### Conclusion
+
+AXCESSR was built with data science at the core. Data was embedded from the first stage of construct mapping and held through to the final UX iteration.
+
+In Phase 1, the theoretical architecture was not assumed - it was derived. Domain selection, factor structure, and item derivation each traced back to documented empirical literature, ensuring that what AXCESSR measures has a defensible basis before a single response was collected.
+
+In Phase 2, that structure was stress-tested. Validation did not confirm the original specification - it interrogated it. Where the data diverged from theory, the instrument changed. Forty-one items were removed not because they felt wrong, but because three independent statistical diagnostics agreed they were underperforming. The PSI analysis then confirmed that this structural revision did not destabilise candidate classifications - the instrument was improved without being disrupted.
+
+In Phase 3, the same rigour was applied to the candidate experience. UX was not treated as a design layer applied after the psychometrics were finalised - it was recognised as a data quality problem. Response flags, completion distributions, and A/B metrics revealed that a poorly designed experience produces noise, and noise degrades the very scores the instrument was built to generate. Version B was not a redesign - it was a data-driven correction.
+
+The result is an end-to-end development pipeline in which measurement science, statistical validation, and user experience research operated as a single integrated system rather than sequential handoffs. Each phase produced findings that constrained and informed the next. No decision was made in isolation.
