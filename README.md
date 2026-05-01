@@ -4,18 +4,21 @@
 
 ## **Introduction**
 
-AXCESSR is a data-driven assessment and decision platform designed to support student funding and success. It combines psychometric measurement, behavioural data, and predictive modelling to match students to suitable tertiary study pathways and funding opportunities.
+Three parties make every student-funding decision: the student, the institution, and the lender. None of them have the data they need to make it well.
 
-The assessment generates insights into students’ interests, skills, and behavioural tendencies, which are used to predict academic success and inform funding decisions. Beyond assessment, AXCESSR forms part of a broader ecosystem that integrates assessment data, tracking, and financial information to support both students and funders.
+In South Africa, roughly 68,000 "missing middle" students sit in the gap between government bursaries (capped at R350,000 household income) and self-funding affordability — and even after recent policy reforms introducing loan funding for the R350K–R600K income band, only about 47% currently receive any support.[^1] South Africa's first-year university dropout rate sits at 35–40%, with financial exclusion and poor programmatic fit consistently identified as primary drivers.[^2] In the United States, the picture is no better: as of December 2025, approximately $180 billion in federal student loans were in default across 7.7 million borrowers, and 29.5% of the active portfolio was delinquent by dollar balance — more than double the pre-pandemic rate.[^3] These outcomes share a common cause: students, higher education institutions, and lenders are all making high-stakes decisions on incomplete and asymmetric information about who will succeed academically and financially.
+
+**AXCESSR** addresses this by manufacturing data symmetry across all three parties. It is a psychometric assessment and decision platform that produces a shared, validated signal — derived from four measured psychological domains (personality, values, emotion traits, and emotion states) — that students, HEIs, and lenders can each act on. Students get evidence of programmatic and career fit before committing time and capital. Institutions get completion-likelihood signals beyond academic records. Lenders get repayment-behaviour predictors that work for thin-file applicants without an established credit history. The same psychometric data point underwrites all three decisions, replacing the fragmented and asymmetric inputs each party currently relies on.
 
 ## **Purpose of the Assessment**
 
 The primary objectives of AXCESSR are to:
 
-* Improve access to student funding
+* Improve access to student funding for academically eligible candidates without an established credit or academic record
 * Match students to programmes where they are likely to succeed
-* Provide data-driven predictions of student outcomes
-* Support risk assessment and management for funders
+* Provide higher education institutions with completion-likelihood signals beyond academic records
+* Provide lenders with repayment-behaviour predictors validated for thin-file populations
+* Support risk assessment, underwriting, and portfolio management for funders
 
 ## How AXCESSR was built
 
@@ -66,7 +69,7 @@ The below figure illustrates the diverse psychological frameworks and reputable 
 
 Every item in the AXCESSR pool traces back to a documented psychological construct. Items were not written opportunistically - each one was derived from a defined theoretical basis and subjected to a structured development pipeline before inclusion in the instrument.
 
-*Figure 5.  Item Development Structure*
+*Figure 5. Item Development Structure*
 
 <img width="614" height="414" alt="image" src="https://github.com/user-attachments/assets/cf785e31-070e-4ad7-b0a8-3a25dbd294e2" />
 
@@ -94,15 +97,13 @@ Item responses → Subfactor score → Factor score → Domain score → Risk pr
 
 <img width="725" height="247" alt="Validation Pipeline" src="https://github.com/user-attachments/assets/96d90b15-1623-44bb-ac9b-a42a73fd8748" />
 
-#### Validation results  
+#### Validation results
 
 Validation was conducted on the full cleaned dataset (after removing speeders, boundary cases, etc.). An initial EFA showed excellent overall fit but revealed many weak or cross‑loading factors. Domain‑level EFAs indicated that some subfactors were not meaningfully separated statistically. This provided evidence for collapsing certain subfactors into single dimensions and regrouping others into broader factors where the empirical structure diverged from the current specification. CFA models could not be estimated due to non‑positive definite covariance matrices, though the theorised structure was evident in composite-based correlation plots. Reliability analyses indicated that most subfactors fell below the 0.70 threshold, underscoring limited internal consistency.
 
-#### Item removal diagnostics  
+#### Item removal diagnostics
 
-To address these issues, a flat higher‑order CFA was retained as an item‑level diagnostic. Standardised loadings onto higher‑order factors were used as one of three convergent item quality indicators, alongside IRT loadings estimated in isolated subfactor models and corrected item‑total correlations (r.drop). Items with CFA loadings below 0.30, low IRT loadings, and weak r.drop values were flagged as problematic. These diagnostics jointly informed item removal, after which validation analyses were rerun on the reduced set.
-
-Convergent evidence across multiple methods led to the removal of 41 items, resulting in a streamlined 206‑item instrument (V2).
+To address these issues, a flat higher‑order CFA was retained as an item‑level diagnostic. Standardised loadings onto higher‑order factors were used as one of three convergent item quality indicators, alongside IRT loadings estimated in isolated subfactor models and corrected item‑total correlations (r.drop). Items with CFA loadings below 0.30, low IRT loadings, and weak r.drop values were flagged as problematic. These diagnostics jointly informed item removal, after which validation analyses were rerun on the reduced set. Convergent evidence across multiple methods led to the removal of 41 items, resulting in a streamlined 206‑item instrument (V2).
 
 **Summary of Problematic items**
 
@@ -123,7 +124,9 @@ These findings represent a preliminary validation stage. High‑stakes data are 
 
 #### **Score Stability: Population Stability Index (PSI)**
 
-A key question following item removal is whether the revised instrument produces materially different risk classifications. The Population Stability Index (PSI) is a metric widely used in credit risk modelling to quantify distributional shift between two scoring populations. A PSI below 0.10 indicates a stable distribution; values between 0.10 and 0.25 indicate moderate shift warranting investigation; values above 0.25 indicate significant drift requiring model review. PSI was computed between V1 (247-item) and V2 (206-item) total and domain-level scores to assess whether item removal destabilised candidate risk profiles.
+A key question following item removal is whether the revised instrument produces materially different risk classifications. The Population Stability Index (PSI) is a metric widely used in credit risk modelling to quantify distributional shift between two scoring populations. A PSI below 0.10 indicates a stable distribution; values between 0.10 and 0.25 indicate moderate shift warranting investigation; values above 0.25 indicate significant drift requiring model review.
+
+PSI was computed between V1 (247-item) and V2 (206-item) total and domain-level scores to assess whether item removal destabilised candidate risk profiles.
 
 *Table 3. Summary of Population Stability Index (PSI) Scores After Item Removal*
 
@@ -276,13 +279,7 @@ An initial sample of N = 2016 candidates completed the assessment. Prior to scor
 | Long-String | Longest string > 15 | 86 | 4.27% |
 | Low Variance | SD < 0.111 | 50 | 2.48% |
 
-*Note.* *Speeders* — completion time below the 10th percentile (< 884 seconds). 
-
-*Low variance* — person-level response SD below one-third of the sample mean SD (< 0.111). 
-
-*Long-string* — longest consecutive identical response sequence exceeding the 95th percentile (> 15). 
-
-*Boundary overuse* — proportion of zero responses exceeding 0.28 or proportion of one responses exceeding 0.50, both derived from the 95th percentile. 
+*Note.* *Speeders* — completion time below the 10th percentile (< 884 seconds). *Low variance* — person-level response SD below one-third of the sample mean SD (< 0.111). *Long-string* — longest consecutive identical response sequence exceeding the 95th percentile (> 15). *Boundary overuse* — proportion of zero responses exceeding 0.28 or proportion of one responses exceeding 0.50, both derived from the 95th percentile.
 
 The figure below illustrates the intersection structure of response quality flags across the 388 flagged candidates. Each bar represents a unique combination of criteria, with bar height indicating the number of candidates flagged by that particular combination.
 
@@ -323,3 +320,13 @@ In Phase 2, that structure was stress-tested. Validation did not confirm the ori
 In Phase 3, the same rigour was applied to the candidate experience. UX was not treated as a design layer applied after the psychometrics were finalised - it was recognised as a data quality problem. Response flags, completion distributions, and A/B metrics revealed that a poorly designed experience produces noise, and noise degrades the very scores the instrument was built to generate. Version B was not a redesign - it was a data-driven correction.
 
 The result is an end-to-end development pipeline in which measurement science, statistical validation, and user experience research operated as a single integrated system rather than sequential handoffs. Each phase produced findings that constrained and informed the next. No decision was made in isolation.
+
+---
+
+## References
+
+[^1]: NSFAS (National Student Financial Aid Scheme) and the Department of Higher Education and Training, Comprehensive Student Funding Model and Missing Middle Loan Funding Programme (announced 2023, ongoing implementation). See SAnews coverage at https://www.sanews.gov.za/south-africa/nzimande-announces-r38bn-funding-missing-middle-students and policy analysis at https://www.universityworldnews.com/post.php?story=20250318114841409. Note: the formally identified missing-middle population (~68,000) reflects the policy-target estimate; broader analyses suggest the true funding-gap population is substantially larger.
+
+[^2]: South African Department of Higher Education and Training; Branson, N. (2024). South African student retention during 2020: Evidence from system-wide higher education institutional data. *South African Journal of Economics*, https://onlinelibrary.wiley.com/doi/10.1111/saje.12361. See also HSRC Policy Brief on dropout rates and BusinessTech reporting at https://businesstech.co.za/news/lifestyle/771036/university-dropout-crisis-for-south-africa/.
+
+[^3]: U.S. Department of Education, Federal Student Aid Data Center, December 2025 portfolio reports. See https://fsapartners.ed.gov/knowledge-center/library/electronic-announcements/2025-08-21/federal-student-aid-posts-updated-reports-fsa-data-center and Congressional Research Service analysis of the 2025 default cliff at https://www.congress.gov/crs-product/IF13113.
