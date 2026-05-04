@@ -1,0 +1,217 @@
+::: text-center
+![](image/AXCESSR_logo.png){width="180px"}
+:::
+
+---
+title: "AXCESSR Conceptualisation"
+author: "Tilabo Williamson, Caitlin Buenk & Jürgen Becker (Project Lead) - AX Consult Group"
+date: "2026-04-23"
+format:
+  html:
+    theme: cosmo
+    code-fold: true
+    code-summary: "Show code"
+    code-tools: true
+    toc: true
+    embed-resources: true
+editor: 
+  markdown: 
+    wrap: 72
+execute:
+  freeze: auto
+---
+
+# Introduction
+
+Three parties make every student-funding decision: the student, the
+institution, and the lender. None of them have the data they need to
+make it well.
+
+In South Africa, roughly 68 000 "missing middle" students sit in the gap
+between government bursaries (capped at R350,000 household income) and
+self-funding affordability - and even after recent policy reforms
+introducing loan funding for the R350K–R600K income band, only about 47%
+currently receive any support.\[\^1\] South Africa's first-year
+university dropout rate sits at 35 – 40%, with financial exclusion and
+poor programmatic fit consistently identified as primary drivers.\[\^2\]
+In the United States, the picture is no better: as of December 2025,
+approximately \$180 billion in federal student loans were in default
+across 7.7 million borrowers, and 29.5% of the active portfolio was
+delinquent by dollar balance - more than double the pre-pandemic
+rate.\[\^3\] These outcomes share a common cause: students, higher
+education institutions, and lenders are all making high-stakes decisions
+on incomplete and asymmetric information about who will succeed
+academically and financially.
+
+AXCESSR addresses this by manufacturing data symmetry across all three
+parties. It is a psychometric assessment and decision platform that
+produces a shared, validated signal - derived from four measured
+psychological domains (personality, values, emotion traits, and emotion
+states) - that students, Higher Education Institutions (HEIs), and
+lenders can each act on. Students get evidence of programmatic and
+career fit before committing time and capital. Institutions get
+completion-likelihood signals beyond academic records. Lenders get
+repayment-behaviour predictors that work for thin-file applicants
+without an established credit history. The same psychometric data point
+underwrites all three decisions, replacing the fragmented and asymmetric
+inputs each party currently relies on.
+
+*AXCESSR Overview*
+
+<img width="700" height="400" alt="AXCESSR Overview" src="https://github.com/user-attachments/assets/034d5d19-c509-4c79-9119-463f6acf51b3" />
+
+AXCESSR sits at the centre of the funding ecosystem, generating tailored
+information for each stakeholder it serves. The *applicant* receives a
+personalised behavioural risk profile. *Lenders* and *HEIs* receive a
+structured risk report, giving them the psychometric signal they need to
+make confident placement and funding decisions on candidates who would
+otherwise be invisible to conventional screening. Lastly, a more
+technical and clinical-grade report is generated and kept on file.
+
+## Purpose of the Assessment
+
+The primary objectives of AXCESSR are to:
+
+-   Improve access to student funding for academically eligible
+    candidates without an established credit or academic record
+-   Match students to programmes where they are likely to succeed
+-   Provide higher education institutions with completion-likelihood
+    signals beyond academic records
+-   Provide lenders with repayment-behaviour predictors validated for
+    thin-file populations
+-   Support risk assessment, underwriting, and portfolio management for
+    funders
+
+## How AXCESSR was built
+
+AXCESSR was not built with data science as an afterthought. From initial
+construct mapping and **conceptualisation** through to **data validity**
+and candidate screening, and into **UX research**, every stage of
+development was data-informed. The pipeline below illustrates how each
+phase fed into the next.
+
+*AXCESSR Development Pipeline*
+
+<img src="https://github.com/user-attachments/assets/f8f88d90-b866-4c3d-950c-4d32aa001feb" alt="AXCESSR Development Pipeline V2" width="600" height="500"/>
+
+The pipeline above illustrates the three core development phases of
+AXCESSR - *conceptualisation*, *validation*, and *UX research* - each
+producing data that feeds the next, and each iteration of the cycle
+informing a sharper version of the instrument. This is not a linear
+build. AXCESSR is designed to evolve: findings from validation reshape
+the item pool, UX research exposes where the assessment places
+unnecessary burden, and both inform the decisions that define the next
+iteration - including the move toward a Computerised Adaptive Testing
+(CAT) engine that shortens assessment time and reduces respondent load
+without sacrificing measurement precision.
+
+The first cycle began with construct mapping and item generation,
+grounded in established psychometric reference scales. Validation
+followed - reliability analyses, IRT diagnostics, and the removal of 41
+problematic items refined the instrument from 247 to 206 items. UX
+research then surfaced the real-world experience of respondents, closing
+the loop and opening the next one. Each phase fed the next, with all
+phases being led by data.
+
+# Conceptualisation
+
+Figma Conceptualisation Presentation Link -\>
+https://www.figma.com/deck/BWVGJvpN2KeOfJEtiEwUf5
+
+## The problem
+
+AXCESSR is a psychometric-based credit risk assessment platform designed
+to extend financial access to individuals overlooked by traditional
+credit origination methods - either due to limited credit history or an
+overestimation of risk based on conventional metrics. Rather than
+relying on historical financial data, the platform evaluates
+creditworthiness through the measurement of stable personal dispositions
+shown to predict financial decision-making and repayment behaviour.
+
+*The Funding Access Gap*
+
+<img src="https://github.com/user-attachments/assets/2ea18234-df5a-4bdd-be35-c5864e69655a" alt="image" width="368" height="343"/>
+
+The platform targets two primary markets: the student loan market, where
+millions of academically eligible students lack access to funding, and
+the broader personal credit market, where thin-file and credit-invisible
+individuals remain underserved. Psychometric scores can be generated for
+any candidate irrespective of formal credit history and, because scores
+are user-generated, they are broadly compliant with consumer privacy
+regulations.
+
+## Assessment Architecture
+
+Four core psychological domains were identified through a review of the
+behavioural science literature as the constructs most predictive of
+real-world financial and educational outcomes:
+
+-   **Personality** — stable trait dispositions that shape how
+    individuals behave across contexts
+-   **Values** — motivational orientations that drive long-term
+    decision-making and goal alignment
+-   **Emotional Traits** — enduring patterns of emotional responding,
+    including impulsivity and self-regulation
+-   **Emotional States** — situational affective tendencies such as
+    stress reactivity and boredom proneness
+
+*AXCESSR Structure*
+
+<img width="400" height="300" alt="AXCESSR Structure V3" src="https://github.com/user-attachments/assets/e6b1358e-0f07-48d6-a170-bb3670a01daa" />
+
+With the domain structure established theoretically, the next challenge
+was operationalisation - translating abstract constructs into
+measurable, defensible items
+
+## Item Development
+
+Item development drew on a structured review of established psychometric
+frameworks, adapting content from validated instruments across each risk
+domain. Source instruments included the International Personality Item
+Pool (IPIP), the HEXACO Personality Inventory, the Schwartz Value Survey
+(SVS), the Trait Emotional Intelligence Questionnaire (TEIQue), the
+Short Dark Triad (SD3), the Edwards Compulsive Buying Scale (ECBS), the
+Barratt Impulsivity Scale, the Sensation Seeking Scale, and the UPPS
+Impulsive Behaviour Scale.
+
+The below figure illustrates the diverse psychological frameworks and
+reputable assessment scales that were integrated to develop the AXCESSR
+item pool, highlighting the foundational instruments that informed its
+construction
+
+*Frameworks Underpinning the AXCESSR Item Pool Development*
+
+<img src="https://github.com/user-attachments/assets/dbdc4bed-83db-49b3-99f0-bf6d39f32f78" alt="Instrument Design" width="1000" height="700"/>
+
+Every item in the AXCESSR pool traces back to a documented psychological
+construct. Items were not written opportunistically - each one was
+derived from a defined theoretical basis and subjected to a structured
+development pipeline before inclusion in the instrument.
+
+*Item Development Structure*
+
+<img src="https://github.com/user-attachments/assets/cf785e31-070e-4ad7-b0a8-3a25dbd294e2" alt="image" width="614" height="414"/>
+
+Each item was engineered to measure a specific construct dimension with
+precision. The example below illustrates the structural components of a
+single AXCESSR.
+
+*Item Anatomy*
+
+| Component | Example |
+|------------------------------------|------------------------------------|
+| **Construct** | Impulse regulation under financial stress |
+| **Item stem** | "When I am under pressure, I tend to make decisions quickly without thinking them through." |
+| **Response format** | Continuous slider — strongly disagree to strongly agree |
+| **Scoring** | Continuous 0–1, reverse-scored, feeds Emotion Traits domain |
+| **Risk direction** | Higher score = elevated impulsivity risk |
+
+## From Score to Decision
+
+Item responses aggregate upward through the hierarchy, producing an
+actionable output at each level.
+
+Item responses → Subfactor score → Factor score → Domain score → Risk
+profile
+
+# References

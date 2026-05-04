@@ -1,0 +1,455 @@
+::: text-center
+![](image/AXCESSR_logo.png){width="180px"}
+:::
+
+
+---
+title: "AXCESSR Data Validity"
+author: "Tilabo Williamson, Caitlin Buenk & Jürgen Becker (Project Lead) - AX Consult Group"
+date: "2026-04-23"
+format:
+  html:
+    theme: cosmo
+    code-fold: true
+    code-summary: "Show code"
+    code-tools: true
+    toc: true
+    embed-resources: true
+editor: 
+  markdown: 
+    wrap: 72
+execute:
+  freeze: auto
+---
+
+```{r packages}
+#| include: false
+library(pacman)
+p_load(magrittr, tidyverse, psych, dplyr, prettydoc, haven, janitor, readxl, writexl, stringr, here, purrr, tibble, ggplot2, kableExtra, e1071, mirt, corrplot, lavaan, scales, patchwork, ggupset, PDtoolkit)
+```
+
+
+# Background
+
+AXCESSR is a multidimensional candidate risk assessment tool designed to measure personality, values, and emotional risk factors. This section documents the psychometric evaluation of the AXCESSR item pool and the
+evidence-based item refinement process undertaken prior to scoring. The goal is not
+to reproduce the full structural model - which constitutes proprietary instrument design -
+but to demonstrate that the retained item set meets accepted standards for reliability,
+internal consistency, and discriminant validity.
+
+```{r reading-in-data}
+# Reading in data
+validity_data <- read_excel(here("data/AXCESSR_validity_data_isolated - 2026.04.24.xlsx"))
+```
+
+# Validation Introduction
+
+Validation was conducted in two phases. In Phase 1, structural fit was evaluated using
+confirmatory factor analysis (CFA). Estimation issues - specifically, non-positive definite
+covariance matrices - were encountered consistently across domains, precluding CFA as a
+primary validation tool. This outcome is not uncommon in instruments with a large number
+of correlated subfactors and continuous item scores, and is well-documented in the
+psychometric literature.
+
+Phase 2 adopted a composite-based validation approach as the primary evidence framework,
+supplemented by item response theory (IRT) diagnostics at the item level. This approach
+evaluates reliability, internal consistency, and item quality directly, without imposing
+a rigid structural model.
+
+Below is a figure outlining the validation process.
+
+```{r fig-pipeline}
+#| out-width: "100%"
+#| fig-align: center
+# Reading in validation pipeline figure
+knitr::include_graphics(here::here("image/axcessr_validation_pipeline.svg"))
+```
+
+
+# Validation Summary
+
+Validation was conducted on the full cleaned dataset (after removing low engagement respondents - speeders, boundary cases, etc.). 
+
+**EFA:** An initial EFA showed excellent overall fit but revealed many weak or cross‑loading factors. Domain‑level EFAs indicated that some subfactors were not meaningfully separated statistically. This provided evidence for removing items, collapsing certain subfactors into single dimensions and regrouping others into broader factors where the empirical structure diverged from the current specification. 
+
+**CFA:** CFA models could not be estimated because the covariance matrices were non‑positive definite. However, the theorized factor structure was still evident in composite‑based correlation plots. Higher‑order factor CFAs were estimable, but they produced poor fit indices. Despite this, these models were retained as indicators of item quality, since the factor loadings continued to demonstrate meaningful cohesion among items.
+
+**Reliability:** Reliability analyses indicated that most subfactors fell below the 0.70 threshold, underscoring limited internal consistency. In addition, r.drop values were examined as item quality indicators. The r.drop statistic reflects the correlation between each item and the total score (excluding that item), with higher values suggesting that the item contributes meaningfully to the overall construct.
+
+**IRT:** IRT analyses were conducted as isolated subfactor models. Results indicated that while some subfactors were strong, others were weak and contained several problematic items. To further evaluate item quality, first‑order (F1) loadings onto the subfactors were examined. These loadings serve as indicators of how well each item aligns with its intended factor, with higher values suggesting stronger cohesion and construct representation.
+
+# Problematic Items
+
+Items were evaluated against a convergent set of three diagnostic criteria, CFA loading, IRT loading and item-total correlaiton (r.drop.). Flagging required
+evidence of poor performance on **all three** criteria to proceed to removal consideration.
+
+The below table summarises the criteria and where problematic items were flagged. A total of **41** items were flagged across all three metrics. These items were defined as problematic and removed  to create a streamlined 206‑item instrument (V2).
+
+```{r problematic-item-table}
+# Problematic item table
+
+flagging_table <- tibble::tribble(
+  ~Diagnostic,                                  ~Total, ~Personality, ~Values, ~Emotion_Traits, ~Emotion_States,
+  "IRT subfactor loading (< 0.30)",             45,     23,           9,       3,               10,
+  "CFA subfactor loading (λ < 0.30)",           75,     41,           15,      5,               14,
+  "Item-total correlation (r < 0.30)",          98,     51,           19,      8,               20,
+  "Flagged by all three criteria",              41,     22,           9,       2,               8)
+
+flagging_table %>% 
+  kbl(
+    col.names = c("Diagnostic", "Total", "Personality", "Values",
+                  "Emotion Traits", "Emotion States"),
+    caption   = "Problematic Item Summary",
+    align = c("l", "c", "c", "c", "c", "c"),
+    escape = FALSE
+  ) %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover"),
+    full_width = TRUE,
+    font_size = 14
+  ) %>% 
+  row_spec(0, bold = FALSE) %>% 
+  row_spec(4, bold = TRUE) %>% 
+  column_spec(1, width = "40%")
+```
+
+
+## Score Distribution Comparison
+
+The plots below show the distribution of domain-level scores before and after item removal.
+Improved item quality is expected to yield tighter, better-differentiated distributions
+with reduced floor and ceiling effects.
+
+```{r score-distributions}
+# Score Comparison Table
+
+comparison <- validity_data %>%
+  select(id,
+         # Original scores
+         personality_risk, values_risk,
+         emotion_traits_risk, emotion_states_risk,
+         total_risk_weighted,
+             # Revised scores
+             personality_risk_check, values_risk_check,
+             emotion_traits_risk_check, emotion_states_risk_check,
+             total_risk_weighted_check) %>% 
+  mutate(across(everything(), as.numeric))
+
+# Mean comparison table
+
+comparison_table <- tibble(
+  Score = c(
+    "Personality Risk", "Values Risk",
+    "Emotion Traits Risk", "Emotion States Risk",
+    "Total Risk (Weighted)"
+  ),
+  Original = c(
+    mean(comparison$personality_risk,        na.rm = TRUE),
+    mean(comparison$values_risk,             na.rm = TRUE),
+    mean(comparison$emotion_traits_risk,     na.rm = TRUE),
+    mean(comparison$emotion_states_risk,     na.rm = TRUE),
+    mean(comparison$total_risk_weighted,     na.rm = TRUE)
+  ),
+  Revised = c(
+    mean(comparison$personality_risk_check,        na.rm = TRUE),
+    mean(comparison$values_risk_check,             na.rm = TRUE),
+    mean(comparison$emotion_traits_risk_check,     na.rm = TRUE),
+    mean(comparison$emotion_states_risk_check,     na.rm = TRUE),
+    mean(comparison$total_risk_weighted_check,     na.rm = TRUE)
+  )
+) %>%
+  mutate(
+    Difference  = round(Revised - Original, 4),
+    Original    = round(Original, 4),
+    Revised     = round(Revised, 4)
+  )
+
+kbl(comparison_table,
+             col.names = c("Score", "Original", "Revised", 
+                           "Difference"),
+             caption   = "Mean Score Comparison: Original vs Revised") %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover"),
+    full_width = TRUE,
+    font_size = 14
+  )
+```
+
+
+
+## Reliability Comparison
+
+Cronbach's α was averaged across subfactors within each domain and compared between 
+the original (V1, 247 items) and revised (V2, 206 items) instruments. Three of the 
+four domains showed improvement following item removal, with Personality and Values 
+showing the most meaningful gains. Emotion States improved marginally, and Emotion 
+Traits remained stable - suggesting the removed items were contributing little noise 
+in that domain to begin with. Taken together, these findings indicate that targeted 
+item removal had its intended effect: a modest but consistent improvement in internal 
+consistency without destabilising the existing structure.
+
+```{r fig-domain-reliability}
+# Domain Reliability Comparison
+
+knitr::include_graphics(here::here("image/reliability_domain_dotplot.png"))
+```
+
+## PSI
+To assess whether item removal materially altered candidate risk profiles, the Population Stability Index (PSI) was computed between original (V1) and revised (V2) scores at the total and domain level. PSI quantifies the distributional shift between two scoring populations and is widely used in credit risk modelling as a model monitoring metric. Scores below 0.10 indicate a stable distribution; values between 0.10 and 0.25 indicate moderate shift warranting investigation; values above 0.25 indicate significant drift requiring model review.
+
+```{r PSI}
+# PSI scores across key domains
+
+# Total weighted score PSI
+psi_total <- psi(
+  base   = comparison$total_risk_weighted,
+  target = comparison$total_risk_weighted_check,
+  bin    = 5,
+  alpha  = 0.05
+)
+
+# Domain-level PSI
+psi_personality <- psi(
+  base   = comparison$personality_risk,
+  target = comparison$personality_risk_check,
+  bin    = 5, alpha = 0.05
+)
+
+psi_values <- psi(
+  base   = comparison$values_risk,
+  target = comparison$values_risk_check,
+  bin    = 5, alpha = 0.05
+)
+
+psi_emotion_traits <- psi(
+  base   = comparison$emotion_traits_risk,
+  target = comparison$emotion_traits_risk_check,
+  bin    = 5, alpha = 0.05
+)
+
+psi_emotion_states <- psi(
+  base   = comparison$emotion_states_risk,
+  target = comparison$emotion_states_risk_check,
+  bin    = 5, alpha = 0.05
+)
+
+# Pull just the PSI values cleanly
+psi_table <- tibble(
+  Score = c("Total Risk (Weighted)", "Personality Risk", 
+            "Values Risk", "Emotion Traits Risk", "Emotion States Risk"),
+  PSI = c(
+    psi_total$res$psi,
+    psi_personality$res$psi,
+    psi_values$res$psi,
+    psi_emotion_traits$res$psi,
+    psi_emotion_states$res$psi
+  ),
+  Interpretation = c(
+    "Stable - minor shift, no action required",
+    "Stable - distribution largely unchanged",
+    "Moderate shift - high considering only 9 items were removed",
+    "Highly stable - negligible distributional change",
+    "Stable - minimal shift across versions"
+  )
+)
+
+kbl(
+  psi_table,
+  col.names = c("Score", "PSI", "Interpretation"),
+  caption   = "Population Stability Index (PSI) Results"
+) %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover"),
+    full_width = TRUE,
+    font_size = 14
+  )
+```
+
+Overall, the revised instrument demonstrated strong score stability. The total weighted risk score produced a PSI of 0.10, sitting at the boundary between stable and moderate shift — indicating that item removal had minimal practical impact on how candidates are ranked and classified overall. Emotion Traits Risk (PSI = 0.004) and Emotion States Risk (PSI = 0.042) were the most stable domains, suggesting that structural refinements in these domains preserved the underlying score distributions almost entirely.
+
+Personality Risk showed a small but acceptable shift (PSI = 0.028), well within the stable range. Values Risk showed the largest shift of the four domains (PSI = 0.188), falling in the moderate range. This is notable given that the Values domain underwent meaningful structural consolidation — the distributional shift reflects genuine refinement of the construct rather than model instability, and remains well below the 0.25 threshold that would require intervention.
+
+Taken together, the PSI results confirm that the revised instrument produces risk classifications that are substantively consistent with the original, while reflecting targeted improvements to construct validity at the domain level.
+
+```{r PSI-bar-chart}
+#| fig-height: 5
+#| fig-width: 8
+
+# PSI Bar Chart
+psi_df <- tibble(
+  Domain = c("Emotion Traits", "Personality", "Emotion States",
+             "Total Risk\n(Weighted)", "Values"),
+  PSI    = c(0.0036, 0.0283, 0.0420, 0.0997, 0.1884),
+  Zone   = case_when(
+    PSI < 0.10 ~ "Stable",
+    PSI < 0.25 ~ "Moderate",
+    TRUE       ~ "Intervention Required"
+  )
+) %>%
+  mutate(Domain = fct_reorder(Domain, PSI))
+
+ggplot(psi_df, aes(x = PSI, y = Domain, fill = Zone)) +
+  geom_col(width = 0.55) +
+  geom_vline(xintercept = 0.10, linetype = "dashed",
+             colour = "#6B3FA0", linewidth = 0.7) +
+  geom_vline(xintercept = 0.25, linetype = "dashed",
+             colour = "#C0392B", linewidth = 0.7) +
+  geom_text(aes(label = round(PSI, 3)),
+            hjust = -0.2, size = 3.5, colour = "#1A1A1A") +
+  annotate("text", x = 0.06, y = 0.6, label = "Stable threshold",
+           hjust = 0, size = 3, colour = "#6B3FA0") +
+  annotate("text", x = 0.2, y = 0.6, label = "Intervention threshold",
+           hjust = 0, size = 3, colour = "#C0392B") +
+  scale_fill_manual(values = c(
+    "Stable"    = "#3B1F5E",
+    "Moderate"  = "#E8A838"
+  )) +
+  scale_x_continuous(limits = c(0, 0.28), expand = c(0, 0)) +
+  labs(
+    title    = "Population Stability Index (PSI) by Domain",
+    subtitle = "V1 (247 items) vs V2 (206 items)",
+    x        = "PSI",
+    y        = NULL,
+    fill     = NULL
+  ) +
+  theme_minimal(base_size = 11) +
+  theme(
+    plot.title       = element_text(face = "bold", colour = "#1A1A1A"),
+    plot.subtitle    = element_text(colour = "#888888", size = 10),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor   = element_blank(),
+    legend.position  = "top",
+    plot.background  = element_rect(fill = "white", colour = NA)
+  )  
+
+ggsave("image/psi_bar.png", width = 12, height = 6, dpi = 180, bg = "white")
+
+
+
+```
+
+The bar chart confirms that distributional shift is concentrated in the Values domain. All other domains sit comfortably below the stable threshold, and the total weighted risk score sits precisely at the boundary (PSI = 0.10) - indicating that at the overall scoring level, V1 and V2 produce near-equivalent candidate classifications.
+
+
+```{r density-overlays}
+# Density Overlays 
+
+score_long <- comparison %>%
+  select(
+    `Total Risk\n(Weighted)` = total_risk_weighted,
+    `Total Risk\n(Weighted) V2` = total_risk_weighted_check,
+    Personality = personality_risk,
+    `Personality V2` = personality_risk_check,
+    Values = values_risk,
+    `Values V2` = values_risk_check,
+    `Emotion Traits` = emotion_traits_risk,
+    `Emotion Traits V2` = emotion_traits_risk_check,
+    `Emotion States` = emotion_states_risk,
+    `Emotion States V2` = emotion_states_risk_check
+  ) %>%
+  pivot_longer(everything(), names_to = "Domain", values_to = "Score") %>%
+  mutate(
+    Version = if_else(str_detect(Domain, "V2"), "V2 (206 items)", "V1 (247 items)"),
+    Domain  = str_remove(Domain, " V2"),
+    Domain  = factor(
+      Domain,
+      levels = c(
+        "Total Risk\n(Weighted)",
+        "Personality",
+        "Values",
+        "Emotion Traits",
+        "Emotion States"
+      )
+    )
+  )
+
+ggplot(score_long, aes(x = Score, fill = Version, colour = Version)) +
+  geom_density(alpha = 0.35, linewidth = 0.7) +
+  facet_wrap(~ Domain, scales = "free_y", ncol = 3) +
+  scale_fill_manual(values = c(
+    "V1 (247 items)" = "#C4A8E8",
+    "V2 (206 items)" = "#3B1F5E"
+  )) +
+  scale_colour_manual(values = c(
+    "V1 (247 items)" = "#9B70CC",
+    "V2 (206 items)" = "#3B1F5E"
+  )) +
+  labs(
+    title    = "Score Distributions: V1 vs V2",
+    subtitle = "Density curves by domain",
+    x        = "Risk Score",
+    y        = "Density",
+    fill     = NULL, colour = NULL
+  ) +
+  theme_minimal(base_size = 11) +
+  theme(
+    plot.title         = element_text(face = "bold", colour = "#1A1A1A"),
+    plot.subtitle      = element_text(colour = "#888888", size = 9),
+    strip.text         = element_text(face = "bold", colour = "#3B1F5E"),
+    panel.grid.minor   = element_blank(),
+    legend.position    = "top",
+    plot.background    = element_rect(fill = "white", colour = NA)
+  )
+
+ggsave("image/psi_density.png", width = 10, height = 6, dpi = 180, bg = "white")
+```
+
+
+The density curves corroborate the PSI findings. For Emotion Traits and Personality, the V1 and V2 distributions are almost indistinguishable. Emotion States and Total Risk show a slight tightening of the distribution in V2 - consistent with the removal of noisy items reducing score variance. The Values domain shows the most visible shift, with the V2 distribution marginally narrower and shifted slightly rightward, reflecting the influence of the removed items on the lower end of the score range. Across all domains, the core shape of the distribution is preserved, confirming that the revised instrument measures the same underlying constructs in a substantively equivalent way.
+
+
+# Further Structural Recommendations
+
+Item  and factor analysis identified several subfactors with overlapping variance structures,
+supporting consolidation of theoretically adjacent constructs. The following
+structural revisions are recommended prior to finalising the scoring model.
+
+```{r structural-recommendations}
+# Structural Recommendations
+
+structural_table <- tibble::tribble(
+  ~Original,                                      ~Recommended,                        ~Rationale,
+  "Stress Tolerance, Flexibility, Optimism",      "Collapse \u2192 Adjustment",    "High inter-subfactor correlations; indistinct factor profiles",
+    "Dependence",                                   "Flag for item redevelopment or removal",   "Cross-loaded across factors",
+  "Compulsivity, Impulsivity and Boredom",                        "Collapse \u2192 Dysregulation", "Shared item content bar some Impulsivity items",
+  "Control, Fearfulness, Anxiety",                "Collapse \u2192 Affectivity",   "Empirically inseparable; theoretically coherent at factor level"
+)
+
+structural_table %>% 
+  kbl(
+    col.names = c("Original Subfactors", "Recommended Structure", "Rationale"),
+    align = c("l", "l", "l"),
+    escape = FALSE
+  ) %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover"),
+    full_width = TRUE,
+    font_size = 14
+  ) %>% 
+  row_spec(0, bold = FALSE) %>% 
+  column_spec(1, width = "30%") %>% 
+  column_spec(2, width = "25%") %>% 
+  column_spec(3, width = "45%")
+```
+
+
+# Conclusion
+
+The validation process described here was designed to serve a single purpose: ensure
+that scoring decisions are grounded in evidence, not assumption. Across three independent
+diagnostic methods - EFA, composite-based reliability analysis, and IRT - a consistent
+signal emerged. A subset of items was not contributing meaningfully to their intended
+constructs, and several subfactors were empirically indistinct from their neighbours.
+Based on this, 41 items were removed and several structural revisions were recommended.
+
+The result is a 206-item instrument with stronger internal consistency, more stable score
+distributions, and a cleaner factor architecture. Critically, candidate classifications
+derived from the revised scoring model were broadly stable — approximately 80% of the
+highest-priority candidates were consistent across versions, confirming that the refinement
+improved precision without materially shifting outcomes.
+
+What the data cannot yet confirm is whether these findings generalise. A second independent
+dataset is in preparation, and final decisions on item removal and structural consolidation
+are contingent on cross-sample replication. The current findings establish a clear
+evidential baseline — the next dataset will determine whether that baseline holds.
+

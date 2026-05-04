@@ -1,0 +1,1152 @@
+::: text-center
+![](image/AXCESSR_logo.png){width="180px"}
+:::
+
+---
+title: "AXCESSR UX Research"
+author: "Tilabo Williamson, Caitlin Buenk & Jürgen Becker (Project Lead) - AX Consult Group"
+date: "2026-04-23"
+format:
+  html:
+    theme: cosmo
+    code-fold: true
+    code-summary: "Show code"
+    code-tools: true
+    toc: true
+    embed-resources: true
+editor: 
+  markdown: 
+    wrap: 72
+execute:
+  freeze: auto
+---
+
+```{r packages}
+#| include: false
+library(pacman)
+p_load(magrittr, tidyverse, psych, dplyr, prettydoc, haven, janitor, readxl, writexl, stringr, here, purrr, tibble, ggplot2, kableExtra, e1071, mirt, corrplot, lavaan, scales, patchwork, ggupset)
+```
+
+
+# Background
+
+AXCESSR is a multidimensional candidate risk assessment tool designed to measure personality, values, and emotional risk factors. Having completed 
+a full psychometric validation pipeline, the next phase of development concerns 
+the candidate-facing experience of the instrument. A technically sound instrument 
+can still yield poor-quality data if the user experience drives disengagement, 
+rushing, or deliberate response manipulation - UX research therefore serves 
+a dual purpose: improving the candidate experience and protecting data integrity.
+
+Because AXCESSR has not yet been deployed in a live environment, clickstream 
+and behavioural interaction data do not yet exist. This section simulates 
+candidate-level UX metrics grounded in real response quality flags from the 
+validation sample, establishing a Version A baseline against which a Version B 
+iteration will be evaluated.
+
+# UX Metrics
+
+The following 11 metrics were selected to capture distinct dimensions
+of candidate engagement. These were selected based on psychometric and
+UX research best practice for high-stakes assessment contexts.
+
+
+```{r reading-in-data}
+# Reading in data
+response_data <- read_excel(here("data/AXCESSR_response_data_isolated - 2026.04.24.xlsx"))
+```
+
+```{r setup}
+#| include: false
+# Setup
+
+set.seed(42)
+n_items <- 247
+```
+
+```{r flag-groups}
+#| include: false
+# Grouping by flags
+
+# Candidates are grouped into three engagement tiers based on their total flag count from the validation phase. These tiers drive all downstream metric simulation.
+
+ux_data <- response_data %>%
+  mutate(
+    flag_group = case_when(
+      total_flags == 0          ~ "low",
+      total_flags %in% c(1, 2) ~ "medium",
+      total_flags >= 3          ~ "high"
+    ) %>% factor(levels = c("low", "medium", "high"))
+  )
+```
+
+#### 1) Time Taken
+
+Time taken is the total time in seconds from assessment start to submission. Version A Taken directly from the real validation data (`time_taken_seconds`). Flagged where total completion time falls below the 10th percentile (884 seconds) in Version A, indicating likely speeding behaviour.
+
+The length of an assessment is one of the most direct determinants of user experience. Instruments that are too long risk fatiguing candidates, increasing the likelihood of disengagement, straight-lining, and premature drop-off - all of which compromise data quality. At 247 items spanning four domains, AXCESSR is a substantive instrument, and completion time is therefore a critical diagnostic metric. Candidates who complete too quickly are likely speeding through without meaningful engagement; those who take excessively long may be experiencing connectivity issues, returning to an abandoned session, or losing focus over an extended sitting. Both extremes represent UX problems that the Version B iteration will aim to address. The distribution of completion times is shown below.
+
+```{r time-distribution}
+#| fig-width: 8
+#| fig-height: 5
+# Time Distribution
+
+time_stats <- ux_data %>%
+  summarise(
+    min_time    = min(time_taken_seconds,    na.rm = TRUE),
+    max_time    = max(time_taken_seconds,    na.rm = TRUE),
+    median_time = median(time_taken_seconds, na.rm = TRUE),
+    mean_time   = mean(time_taken_seconds,   na.rm = TRUE)
+  )
+
+y_max <- ggplot_build(
+  ggplot(ux_data, aes(x = time_taken_seconds)) + 
+    geom_histogram(bins = 40)
+)$data[[1]]$count %>% max()
+
+ggplot(ux_data, aes(x = time_taken_seconds)) +
+  geom_histogram(bins = 40, fill = "#3B1F5E", colour = "#3B1F5E") +
+  geom_vline(xintercept = time_stats$min_time,    colour = "#6A1B9A", linetype = "dashed") +
+  geom_vline(xintercept = time_stats$max_time,    colour = "#6A1B9A", linetype = "dashed") +
+  geom_vline(xintercept = time_stats$median_time, colour = "#9A4EAE", linetype = "dotted") +
+  geom_vline(xintercept = time_stats$mean_time,   colour = "#C2A9EF", linetype = "dotted") +
+  annotate("text",
+    x = time_stats$min_time, y = y_max * 0.40,
+    label   = paste0("Min: ", round(time_stats$min_time, 1)),
+    colour  = "#6A1B9A", angle = 90, vjust = -0.5, size = 5
+  ) +
+  annotate("text",
+    x = time_stats$max_time, y = y_max * 0.40,
+    label   = paste0("Max: ", round(time_stats$max_time, 1)),
+    colour  = "#6A1B9A", angle = 90, vjust = -0.5, size = 5
+  ) +
+  annotate("text",
+    x = time_stats$median_time, y = y_max * 0.40,
+    label   = paste0("Median: ", round(time_stats$median_time, 1)),
+    colour  = "#9A4EAE", angle = 90, vjust = -0.5, size = 5
+  ) +
+  annotate("text",
+    x = time_stats$mean_time, y = y_max * 0.40,
+    label   = paste0("Mean: ", round(time_stats$mean_time, 1)),
+    colour  = "#C2A9EF", angle = 90, vjust = -0.5, size = 5
+  ) +
+  labs(
+    title    = "Distribution of AXCESSR Completion Times",
+    subtitle = "Version A — validation sample (N = 2016)",
+    x        = "Time Taken (seconds)",
+    y        = "Number of Respondents"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title    = element_text(face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(colour = "grey50", hjust = 0.5),
+    axis.title    = element_text(face = "bold")
+  )
+```
+
+The distribution is strongly right-skewed - the majority of candidates completed the assessment within a reasonable window (median ~31 minutes), but a long tail of outliers extends well beyond 2 hours, pulling the mean (~34 minutes) above the median. This suggests that while most candidates engage at a normal pace, a subset experience significant delays. The minimum of 39 seconds flags near-certain speeding behaviour. Both extremes represent UX problems that Version B should address.
+
+```{r time-taken-version-B}
+# Time Taken (Verison B)
+
+# Version B: CAT reduces instrument length — time distribution tighter and shorter
+
+set.seed(43)
+
+speeder_threshold_a  <- 884
+cat_reduction_factor <- 0.50
+speeder_threshold_b  <- round(speeder_threshold_a * cat_reduction_factor)
+#= 442
+
+time_b_params <- tibble(
+  flag_group = c("low",  "medium", "high"),
+  mean_time  = c(1100,   1500,     2200),
+  sd_time    = c(350,    500,      650)
+)
+
+ux_version_b <- ux_data %>%
+  left_join(time_b_params, by = "flag_group") %>%
+  mutate(
+    time_taken_seconds = rnorm(n(), mean = mean_time, sd = sd_time) %>%
+      abs() %>%
+      round(0),
+    time_flag = time_taken_seconds < speeder_threshold_b
+  ) %>%
+  select(-mean_time, -sd_time)
+
+```
+
+#### 2) Response Variance
+
+Response variance is the standard deviation of a candidate's responses across all items, capturing how much their answers varied throughout the assessment. Taken directly from the real validation data (`person_sd`). No simulation required. Flagged where SD falls below a 1/3rd of the mean (0.11), indicating near-flat responding across items. Low variance — particularly scores approaching zero - is a strong behavioural indicator of disengagement, straight-lining, or deliberate response manipulation.
+
+Person-level variance is a direct window into response authenticity. Where time taken flags candidates who rushed through the instrument, response variance flags those who engaged without genuine differentiation - selecting effectively the same response regardless of item content. In a 247-item assessment covering four psychologically distinct domains, meaningful variance is expected; a candidate whose responses barely fluctuate across personality, values, and emotional risk items is unlikely to have engaged with the content at all. The distribution of person-level variance is shown below.
+
+```{r response-variance-distribution}
+#| fig-width: 8
+#| fig-height: 5
+# Response Variance Distribution
+
+sd_stats <- ux_data %>%
+  summarise(
+    min_time    = min(person_sd,    na.rm = TRUE),
+    max_time    = max(person_sd,    na.rm = TRUE),
+    median_time = median(person_sd, na.rm = TRUE),
+    mean_time   = mean(person_sd,   na.rm = TRUE)
+  )
+
+y_max <- ggplot_build(
+  ggplot(ux_data, aes(x = person_sd)) + 
+    geom_histogram(bins = 40)
+)$data[[1]]$count %>% max()
+
+ggplot(ux_data, aes(x = person_sd)) +
+  geom_histogram(bins = 40, fill = "#3B1F5E", colour = "#3B1F5E") +
+  geom_vline(xintercept = sd_stats$min_time,    colour = "#6A1B9A", linetype = "dashed") +
+  geom_vline(xintercept = sd_stats$max_time,    colour = "#6A1B9A", linetype = "dashed") +
+  geom_vline(xintercept = sd_stats$median_time, colour = "#9A4EAE", linetype = "dotted") +
+  geom_vline(xintercept = sd_stats$mean_time,   colour = "#C2A9EF", linetype = "dotted") +
+  annotate("text",
+    x = sd_stats$min_time, y = y_max * 0.40,
+    label   = paste0("Min: ", round(sd_stats$min_time, 1)),
+    colour  = "#6A1B9A", angle = 90, vjust = -0.5, size = 5
+  ) +
+  annotate("text",
+    x = sd_stats$max_time, y = y_max * 0.40,
+    label   = paste0("Max: ", round(sd_stats$max_time, 1)),
+    colour  = "#6A1B9A", angle = 90, vjust = -0.5, size = 5
+  ) +
+  annotate("text",
+    x = sd_stats$median_time, y = y_max * 0.40,
+    label   = paste0("Median: ", round(sd_stats$median_time, 1)),
+    colour  = "#9A4EAE", angle = 90, vjust = -0.5, size = 5
+  ) +
+  annotate("text",
+    x = sd_stats$mean_time, y = y_max * 0.40,
+    label   = paste0("Mean: ", round(sd_stats$mean_time, 1)),
+    colour  = "#C2A9EF", angle = 90, vjust = -0.5, size = 5
+  ) +
+  labs(
+    title    = "Distribution of AXCESSR Person-Level Variance",
+    subtitle = "Version A — validation sample (N = 2016)",
+    x        = "Person-Level Variance",
+    y        = "Number of Respondents"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title    = element_text(face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(colour = "grey50", hjust = 0.5),
+    axis.title    = element_text(face = "bold")
+  )
+```
+
+The distribution is left-skewed and centred around a mean and median of 0.30, suggesting the majority of candidates varied their responses meaningfully across items. The left tail is the primary concern - candidates approaching zero variance responded near-identically across all 247 items, a pattern inconsistent with genuine engagement across four psychologically distinct domains. Version B interventions should aim to shift this left tail rightward without disturbing the healthy central distribution.
+
+```{r response-variance-version-B}
+# Response Variance (Verison B)
+
+# Version B: Engagement support shifts left tail rightward
+
+var_b_params <- tibble(
+  flag_group = c("low", "medium", "high"),
+  mean_var   = c(0.34,  0.28,     0.20),
+  sd_var     = c(0.06,  0.07,     0.08)
+)
+
+ux_version_b %<>%
+  left_join(var_b_params, by = "flag_group") %>%
+  mutate(
+    person_sd = rnorm(n(), mean = mean_var, sd = sd_var) %>%
+      pmax(0) %>%
+      pmin(0.5) %>%
+      round(3)
+  ) %>%
+  select(-mean_var, -sd_var)
+```
+
+#### 3) Long String Responding
+
+Long string responding refers to consecutive runs of identical responses — for example, answering 0 repeatedly across many items without variation. Taken directly from the real validation data (`longstring`). No simulation required. Flagged where the longest consecutive run of identical responses exceeded the 95th percentile (15 items).
+
+```{r longstring-version-B}
+# Longstring (Version B)
+# Version B: Section breaks interrupt run patterns — fewer long strings
+
+ux_version_b %<>%
+  mutate(
+    longstring = case_when(
+      flag_group == "low"    ~ 0.01,
+      flag_group == "medium" ~ 0.03,
+      flag_group == "high"   ~ 0.08
+    ),
+    longstring_flag = rbinom(n(), 1, longstring)
+  )
+```
+
+#### 4) Boundary Overuse
+
+Boundary overuse captures systematic overreliance on extreme response options — consistently selecting 0 or 1 rather than the full response scale. Taken directly from the real validation data (`prop_one` and
+`prop_zero`). No simulation required. Flagged where the proportion of zero or one responses exceeds 95th percentile (zeros -> 0.28 or ones -> 0.50).
+
+```{r boundary-version-B}
+# Boundary Overuse (Version B)
+
+# Version B: Engagement support reduces extreme responding
+
+ux_version_b %<>%
+  mutate(
+    p_boundary = case_when(
+      flag_group == "low"    ~ 0.03,
+      flag_group == "medium" ~ 0.06,
+      flag_group == "high"   ~ 0.12
+    ),
+    boundary_flag = rbinom(n(), 1, p_boundary)
+  )
+```
+
+#### 5) Completion Rate
+
+Completion rate is a binary indicator of whether the candidate finished the assessment in a single uninterrupted sitting (`completed_single_sitting`). Completion probability is assigned by flag group,
+reflecting the expectation that disengaged or low-quality responders are
+more likely to abandon the instrument.
+
+```{r completion-rate-version-A}
+# Completion Rate (Version A)
+
+# For each respondent, a probability of completing the assessment is assigned based on their flag_group (low = 92%, medium = 70%, high = 35%) rbinom() draws a 0 or 1 for each person, where 1 = TRUE (completed), and 0 = FALSE (did not complete).
+
+ux_version_a <- ux_data %>% 
+  mutate(
+    p_complete = case_when(
+      flag_group == "low"    ~ 0.92,
+      flag_group == "medium" ~ 0.70,
+      flag_group == "high"   ~ 0.35
+    ),
+    completed_single_sitting = rbinom(n(), 1, p_complete)
+  )
+```
+
+```{r completion-version-B}
+# Completion Rate (Version B)
+
+# Version B: Shorter instrument → higher completion rates across all groups
+
+ux_version_b %<>%
+  mutate(
+    p_complete = case_when(
+      flag_group == "low"    ~ 0.98,
+      flag_group == "medium" ~ 0.88,
+      flag_group == "high"   ~ 0.60
+    ),
+    completed_single_sitting = rbinom(n(), 1, p_complete)
+  )
+```
+
+#### 6) Click-Through Rate
+
+The proportion of items answered suspiciously quickly. Rather than
+simulating this independently, we anchor it in each candidate's real
+`time_taken_seconds` value - faster overall responders receive higher
+click-through rates, with an additional offset applied by flag group.
+
+Click-through rate is the proportion of items a candidate answered suspiciously quickly, indicating they may have progressed through the assessment without meaningfully engaging with item content. Simulation anchored in real (`time_taken_seconds`). Flagged where click-through rate exceeds 0.70.
+
+```{r click-through-rate-version-A}
+# Click-through Rate (Version A)
+
+ux_version_a %<>%
+  mutate(
+    time_z = scale(time_taken_seconds)[,1],
+    click_through_rate = plogis(
+      -time_z + case_when(
+        flag_group == "low"    ~ -1.5,
+        flag_group == "medium" ~  0.0,
+        flag_group == "high"   ~  1.5
+      )
+    ) %>% round(3)
+  )
+```
+
+```{r clickthrough-version-B}
+# Click-through Rate (Version B)
+
+# Version B: Shorter assessment reduces motivation to rush
+
+ux_version_b %<>%
+  mutate(
+    time_z = scale(time_taken_seconds)[,1],
+    click_through_rate = plogis(
+      -time_z + case_when(
+        flag_group == "low"    ~ -2.5,
+        flag_group == "medium" ~ -1.0,
+        flag_group == "high"   ~  0.5
+      )
+    ) %>% round(3)
+  )
+```
+
+#### 7) Drop-Off Point
+
+The item number at which the candidate abandoned the assessment. Only
+assigned to candidates who did not complete in a single sitting.
+High-flag candidates tend to drop off earlier in the instrument;
+medium-flag candidates persist longer before abandoning.
+
+Drop-off point is the item number at which a candidate abandoned the assessment without completing it (`completed_single_sitting`). Only assigned to candidates who did not complete in a single sitting. Flagged as "early drop-off" where abandonment occurs before item 100 (version A).
+
+```{r drop-off-point-version-A}
+# Drop-off Point (Version A)
+
+ux_version_a %<>%
+  mutate(
+    drop_off_item = case_when(
+      completed_single_sitting == 1 ~ NA_real_,
+      flag_group == "high"          ~ round(runif(n(), min = 20,  max = 80)),
+      flag_group == "medium"        ~ round(runif(n(), min = 40,  max = 120)),
+      flag_group == "low"           ~ NA_real_
+    )
+  )
+```
+
+```{r dropoff-version-B}
+# Drop-0ff Point (Version B)
+
+# Version B: Drop-off threshold adjusted for CAT: Ranges compressed to reflect shorter instrument (~120 items max)
+
+ux_version_b %<>%
+  mutate(
+    drop_off_item = case_when(
+      completed_single_sitting == 1 ~ NA_real_,
+      flag_group == "high"          ~ round(runif(n(), min = 30, max = 80)),
+      flag_group == "medium"        ~ round(runif(n(), min = 65, max = 110)),
+      flag_group == "low"           ~ NA_real_
+    )
+  )
+```
+
+
+#### 8) Inter-Item Response Time Consistency
+
+The standard deviation of simulated per-item response times. A low SD
+indicates suspiciously uniform pacing — a hallmark of disengaged or
+faking candidates. This metric is anchored in the real `low_var_flag`
+where available, with group-level parameters applied otherwise.
+
+Inter-item response time consistency is the standard deviation of per-item response times across the assessment - a low value indicates the candidate responded at a suspiciously uniform pace throughout. Flagged where RT consistency SD falls below 1.5.
+
+```{r rt-consistency-version-A}
+# Response Time (Version A)
+
+ux_version_a %<>%
+  mutate(
+    rt_consistency_sd = case_when(
+      low_var_flag == 1    ~ rnorm(n(), mean = 0.8, sd = 0.2) %>% abs(),
+      flag_group == "high" ~ rnorm(n(), mean = 1.2, sd = 0.4) %>% abs(),
+      flag_group == "medium" ~ rnorm(n(), mean = 3.5, sd = 1.0) %>% abs(),
+      flag_group == "low"  ~ rnorm(n(), mean = 6.0, sd = 1.5) %>% abs()
+    ) %>% round(2)
+  )
+```
+
+```{r rt-consistency-version-B}
+# Response Time (Version B)
+
+# Version B: More genuine engagement → greater natural variation in pacing
+
+ux_version_b %<>%
+  mutate(
+    rt_consistency_sd = case_when(
+      flag_group == "low"    ~ rnorm(n(), mean = 7.0, sd = 1.5) %>% abs(),
+      flag_group == "medium" ~ rnorm(n(), mean = 4.5, sd = 1.2) %>% abs(),
+      flag_group == "high"   ~ rnorm(n(), mean = 2.5, sd = 0.8) %>% abs()
+    ) %>% round(2)
+  )
+```
+
+#### 9) Onset of Disengagement
+
+The item number at which disengagement is estimated to have begun,
+defined as the point where long-string responding, low response
+variance, and uniform inter-item RT converge. Flagged as "early" where onset occurs before item 60 in Version A.
+
+```{r onset-disengagement-version-A}
+# Onset of Disengagement (Version A)
+
+ux_version_a %<>%
+  mutate(
+    onset_disengagement = case_when(
+      flag_group == "high"   ~ round(runif(n(), min = 10,  max = 50)),
+      flag_group == "medium" ~ round(runif(n(), min = 30,  max = 80)),
+      flag_group == "low"    ~ NA_real_
+    )
+  )
+```
+
+```{r disengagement-version-B}
+# Onset of Disengagement (Version B)
+
+# Version B: Onset threshold adjusted for CAT: Ranges capped to reflect ~120 item CAT session
+
+ux_version_b %<>%
+  mutate(
+    onset_disengagement = case_when(
+      flag_group == "low"    ~ NA_real_,
+      flag_group == "medium" ~ ifelse(
+        rbinom(n(), 1, 0.60) == 1, NA_real_,
+        round(runif(n(), min = 50, max = 100))
+      ),
+      flag_group == "high"   ~ ifelse(
+        rbinom(n(), 1, 0.25) == 1, NA_real_,
+        round(runif(n(), min = 35, max = 90))
+      )
+    )
+  )
+```
+
+#### 10) Platform Load Time
+
+In environments with variable connectivity, platform load time (`load_time_seconds`) and
+connectivity interruptions represent meaningful UX signals that sit
+outside candidate behaviour but directly affect engagement quality. Flagged where average page load time exceeds 5 seconds.
+
+```{r load-time-version-A}
+# Load time (Version A)
+ux_version_a %<>%
+  mutate(
+    load_time_seconds = case_when(
+      time_flag == 1 ~ rnorm(n(), mean = 8.5, sd = 2.0) %>% abs() %>% round(2),
+      flag_group == "high"   ~ rnorm(n(), mean = 5.5, sd = 1.8) %>% abs() %>% round(2),
+      flag_group == "medium" ~ rnorm(n(), mean = 3.8, sd = 1.2) %>% abs() %>% round(2),
+      flag_group == "low"    ~ rnorm(n(), mean = 2.4, sd = 0.8) %>% abs() %>% round(2)
+    )
+  )
+```
+
+```{r loadtime-version-B}
+# Load time (Version B)
+
+# Version B: Platform optimisation reduces load times across all candidates
+
+ux_version_b %<>%
+  mutate(
+    load_time_seconds = case_when(
+      flag_group == "low"    ~ rnorm(n(), mean = 1.4, sd = 0.4) %>% abs() %>% round(2),
+      flag_group == "medium" ~ rnorm(n(), mean = 2.0, sd = 0.6) %>% abs() %>% round(2),
+      flag_group == "high"   ~ rnorm(n(), mean = 2.8, sd = 0.9) %>% abs() %>% round(2)
+    )
+  )
+```
+
+#### 11) Connectivity Drop Events
+
+Connectivity drop events are the number of times a candidate lost connection and was forced to reconnect during their assessment session (`connectivity_drops`), potentially disrupting response flow and artificially inflating completion time. Flagged where one or more drop events are recorded.
+
+```{r connectivity-drops-version-A}
+# Connectivity Drops (Version)
+
+# Base drop probability weakly correlated with flag group
+# Connectivity is largely random but reflects access inequality
+
+ux_version_a %<>%
+  mutate(
+    p_drop = case_when(
+      flag_group == "low"    ~ 0.03,
+      flag_group == "medium" ~ 0.07,
+      flag_group == "high"   ~ 0.12
+    ),
+    connectivity_drops = rpois(n(), lambda = p_drop * 5) 
+  )
+```
+
+```{r version-b-connectivity}
+# Connectivity Drops (Version B)
+
+# Version B: Shorter session = less connectivity exposure
+
+ux_version_b %<>%
+  mutate(
+    p_drop = case_when(
+      flag_group == "low"    ~ 0.01,
+      flag_group == "medium" ~ 0.02,
+      flag_group == "high"   ~ 0.06
+    ),
+    connectivity_drops = rpois(n(), lambda = p_drop * 5)
+  )
+```
+
+# Version A
+
+Version A establishes the **baseline UX profile** of the AXCESSR instrument
+prior to any targeted intervention. This baseline will
+be used to identify priority intervention points for the Version B UX
+redesign.
+
+The table below summarises flag prevalence across the full sample 
+(N = 2016), spanning both empirical quality flags and UX engagement 
+metrics.
+```{r ux-flag-summary-table-a}
+# UX Flag Summary (Version A)
+n_total <- 2016
+
+tibble(
+  `Quality Flag` = c(
+    "Speeder",
+    "Low Variance",
+    "Long String",
+    "Boundary Overuse",
+    "Completion (single sitting)",
+    "High Click-Through",
+    "Early Drop-Off",
+    "Uniform RT (Inter-item)",
+    "Early Onset of Disengagement",
+    "Loading Time",
+    "Connectivity Drop"
+  ),
+  Criterion = c(
+    "Total time taken < 884 seconds",
+    "Person SD < 0.11",
+    "Longest string > 15",
+    "Proportion of 0s > 0.28 or 1s > 0.50",
+    "Did not complete in a single sitting",
+    "Click-through rate > 0.70",
+    "Abandoned before item 100",
+    "RT consistency SD < 1.5",
+    "Onset of disengagement before item 60",
+    "Average page load time exceeds 5 seconds",
+    "One or more connectivity drop events"
+  ),
+  Count = c(
+    sum(ux_version_a$time_flag        == "TRUE", na.rm = TRUE),
+    sum(ux_version_a$low_var_flag     == "TRUE", na.rm = TRUE),
+    sum(ux_version_a$longstring_flag  == "TRUE", na.rm = TRUE),
+    sum(ux_version_a$boundary_flag    == "TRUE", na.rm = TRUE),
+    sum(ux_version_a$completed_single_sitting == 0, na.rm = TRUE),
+    sum(ux_version_a$click_through_rate > 0.70, na.rm = TRUE),
+    sum(ux_version_a$drop_off_item < 100, na.rm = TRUE),
+    sum(ux_version_a$rt_consistency_sd < 1.5, na.rm = TRUE),
+    sum(ux_version_a$onset_disengagement < 60, na.rm = TRUE),
+    sum(ux_version_a$load_time_seconds > 5.0, na.rm = TRUE),
+    sum(ux_version_a$connectivity_drops > 0, na.rm = TRUE)
+  )
+) %>%
+  mutate(
+    Percentage = (Count / n_total * 100) %>% round(2) %>% paste0("%")
+  ) %>%
+  kable(
+    caption = "UX Quality Flag Summary — Version A (N = 2016)",
+    align   = c("l", "l", "r", "r")
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    full_width        = FALSE,
+    font_size         = 13
+  ) %>%
+  row_spec(0, bold = TRUE, background = "#5b2c6f", color = "white")
+```
+
+
+Connectivity drop events emerged as the most prevalent flag (18.3%), 
+reflecting the real-world infrastructure constraints of the deployment 
+context. Behavioural disengagement flags - long string, low variance, 
+speeding - remain relatively contained (2–10%), suggesting the majority 
+of the validation sample engaged meaningfully with the instrument. The below plot shows this information visually.
+
+```{r lollipop-flag-summary-a}
+#| fig-width: 9
+#| fig-height: 6
+# Lollipop Figure (Version A)
+
+flag_summary <- tibble(
+  flag = c(
+    "Speeder",
+    "Low Response Variance",
+    "Long String",
+    "Boundary Overuse",
+    "Did Not Complete",
+    "High Click-Through",
+    "Early Drop-Off",
+    "Uniform Response Time",
+    "Early Disengagement",
+    "Loading Time",
+    "Connectivity Drop"
+  ),
+  count = c(
+    sum(ux_version_a$time_flag == 1,                    na.rm = TRUE),
+    sum(ux_version_a$low_var_flag == 1,                 na.rm = TRUE),
+    sum(ux_version_a$longstring_flag == 1,              na.rm = TRUE),
+    sum(ux_version_a$boundary_flag == 1,                na.rm = TRUE),
+    sum(ux_version_a$completed_single_sitting == 0,     na.rm = TRUE),
+    sum(ux_version_a$click_through_rate > 0.70,         na.rm = TRUE),
+    sum(ux_version_a$drop_off_item < 100,               na.rm = TRUE),
+    sum(ux_version_a$rt_consistency_sd < 1.5,           na.rm = TRUE),
+    sum(ux_version_a$onset_disengagement < 60,          na.rm = TRUE),
+    sum(ux_version_a$load_time_seconds > 5.0,           na.rm = TRUE),
+    sum(ux_version_a$connectivity_drops > 0,            na.rm = TRUE)
+  )
+) %>%
+  mutate(
+    percentage = (count / 2016 * 100) %>% round(1),
+    flag       = fct_reorder(flag, percentage),
+    label      = paste0(percentage, "%")
+  )
+
+ggplot(flag_summary, aes(x = percentage, y = flag)) +
+  geom_segment(
+    aes(x = 0, xend = percentage, y = flag, yend = flag),
+    colour = "#9b59b6", linewidth = 0.8
+  ) +
+  geom_point(colour = "#5b2c6f", size = 4) +
+  geom_text(
+    aes(label = label),
+    hjust = -0.3, size = 3.5, colour = "grey30"
+  ) +
+  scale_x_continuous(
+    limits = c(0, max(flag_summary$percentage) * 1.2),
+    labels = scales::label_percent(scale = 1)
+  ) +
+  labs(
+    title    = "UX Quality Flag Prevalence - Version A",
+    subtitle = "Percentage of candidates (N = 2016) flagged on each metric",
+    x        = "Percentage Flagged",
+    y        = NULL
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    plot.title       = element_text(face = "bold", size = 14),
+    plot.subtitle    = element_text(colour = "grey50", size = 11),
+    panel.grid.minor = element_blank(),
+    panel.grid.major.y = element_blank()
+  )
+```
+
+### Diagnostic summary
+
+The flag prevalence data surfaces four priority concerns heading into Version B. Completion rate is the headline issue - nearly 13% of candidates did not finish in a single sitting, and a further 18% experienced at least one connectivity drop event, suggesting that session length is creating meaningful exposure to both fatigue and infrastructure risk. Boundary overuse (9.52%), high click-through rate (10.81%), and speeders (9.97%) point to a secondary problem: a non-trivial minority of candidates are not engaging authentically with item content, whether through rushing or systematic extreme responding.
+
+These patterns are not independent. A long instrument increases fatigue, fatigue drives disengagement, and disengagement manifests as the flag co-occurrences visible in the high-flag group. The data therefore points to a single primary lever: reducing instrument length through adaptive delivery.
+
+### Recommendations
+
+**1. Adaptive Item Delivery via CAT**
+
+With 11.86% of candidates failing to complete in a single sitting and click-through rates flagging 10.81% as likely rushing, instrument length is the primary UX risk. A CAT engine addressing this single lever produces downstream improvements across most metrics in Version B - completion rate, click-through, drop-off, onset of disengagement, connectivity drops, and load time exposure all improve as direct consequences of shorter sessions.
+
+**2. Platform Load Optimisation**
+
+With 11.01% of Version A candidates experiencing load times exceeding 5 seconds and 16.12% recording at least one connectivity drop event, platform performance represents a meaningful risk independent of candidate behaviour. Asset delivery optimisation and offline-capable session caching are particularly relevant given variable connectivity in the deployment context.
+
+**3. In-Session Engagement Support**
+
+Speeders (9.97%), long string responding (4.27%) and boundary overuse (9.52%) in Version A indicate that a meaningful minority of candidates are disengaged form the assessment and trying to get through it quickly or with as little effort as possible. Progress indicators, estimated time remaining, and structured domain-break screens are low-cost interventions that delay or prevent onset of disengagement.
+
+These three interventions are not independent. CAT reduces session length, which reduces fatigue, connectivity exposure, and the motivation to rush simultaneously. Platform optimisation reduces the friction that can trigger early drop-off. Engagement support addresses the candidates who would disengage regardless of length. Together they address the full spectrum of UX risk identified in Version A - behavioural, dispositional, and infrastructural.
+
+
+# Version B
+
+Version B simulates the **expected UX profile** of AXCESSR following three targeted interventions identified from the Version A diagnostic. Critically, the most impactful change is the introduction of a **Computerised Adaptive Testing (CAT) engine**. Rather than administering all items to every candidate, the CAT engine anchors each session on low, moderate, and high difficulty items per construct, and only extends administration when measurement precision (standard error) remains above threshold. The result is a substantially shorter, individually tailored assessment that delivers equivalent psychometric information in fewer items - reducing fatigue, connectivity exposure, and the motivation to rush.
+
+
+The following changes were simulated for Version B:\
+
+CAT engine deployment - adaptive item selection replaces fixed-form administration, reducing average item exposure per candidate by an estimated 40–50%
+
+Platform load optimisation - asset delivery improvements and offline-capable session caching reduce page load latency
+
+In-session engagement support - progress indicators, estimated time remaining, and structured domain-break screens are introduced to maintain candidate attention
+
+The table below summarises flag prevalence across the full sample 
+(N = 2016), spanning both empirical quality flags and UX engagement 
+metrics.
+```{r ux-flag-summary-table-b}
+# UX Flag Summary (Version B)
+
+n_total <- 2016
+
+tibble(
+  `Quality Flag`= c(
+    "Speeder",
+    "Low Variance",
+    "Long String",
+    "Boundary Overuse",
+    "Completion (single sitting)",
+    "High Click-Through",
+    "Early Drop-Off",
+    "Uniform RT (Inter-item)",
+    "Early Onset of Disengagement",
+    "Loading Time",
+    "Connectivity Drop"
+  ),
+  Criterion = c(
+    "Total time taken < 442 seconds",
+    "Person SD < 0.11",
+    "Longest string > 15",
+    "Proportion of 0s > 0.28 or 1s > 0.50",
+    "Did not complete in a single sitting",
+    "Click-through rate > 0.70",
+    "Abandoned before item 50",
+    "RT consistency SD < 1.5",
+    "Onset of disengagement before item 30",
+    "Average page load time exceeds 5 seconds",
+    "One or more connectivity drop events"
+  ),
+  Count = c(
+    sum(ux_version_b$time_flag        == "TRUE", na.rm = TRUE),
+    sum(ux_version_b$low_var_flag     == "TRUE", na.rm = TRUE),
+    sum(ux_version_b$longstring_flag  == "TRUE", na.rm = TRUE),
+    sum(ux_version_b$boundary_flag    == "TRUE", na.rm = TRUE),
+    sum(ux_version_b$completed_single_sitting == 0, na.rm = TRUE),
+    sum(ux_version_b$click_through_rate > 0.70, na.rm = TRUE),
+    sum(ux_version_b$drop_off_item < 50, na.rm = TRUE),
+    sum(ux_version_b$rt_consistency_sd < 1.5, na.rm = TRUE),
+    sum(ux_version_b$onset_disengagement < 30, na.rm = TRUE),
+    sum(ux_version_b$load_time_seconds > 5.0, na.rm = TRUE),
+    sum(ux_version_b$connectivity_drops > 0, na.rm = TRUE)
+  )
+) %>%
+  mutate(
+    Percentage = (Count / n_total * 100) %>% round(2) %>% paste0("%")
+  ) %>%
+  kable(
+    caption = "UX Quality Flag Summary — Version B (N = 2016)",
+    align   = c("l", "l", "r", "r")
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    full_width        = FALSE,
+    font_size         = 13
+  ) %>%
+  row_spec(0, bold = TRUE, background = "#5b2c6f", color = "white")
+```
+
+Connectivity drop events emerged as the most prevalent flag (18.3%), 
+reflecting the real-world infrastructure constraints of the deployment 
+context. Behavioural disengagement flags - long string, low variance, 
+speeding - remain relatively contained (2–10%), suggesting the majority 
+of the validation sample engaged meaningfully with the instrument. The below plot shows this information visually.
+
+```{r lollipop-flag-summary-b}
+#| fig-width: 9
+#| fig-height: 6
+# Lollipop Figure (Version B)
+
+flag_summary <- tibble(
+  flag = c(
+    "Speeder",
+    "Low Response Variance",
+    "Long String",
+    "Boundary Overuse",
+    "Did Not Complete",
+    "High Click-Through",
+    "Early Drop-Off",
+    "Uniform Response Time",
+    "Early Disengagement",
+    "Loading Time",
+    "Connectivity Drop"
+  ),
+  count = c(
+    sum(ux_version_b$time_flag == 1,                    na.rm = TRUE),
+    sum(ux_version_b$low_var_flag == 1,                 na.rm = TRUE),
+    sum(ux_version_b$longstring_flag == 1,              na.rm = TRUE),
+    sum(ux_version_b$boundary_flag == 1,                na.rm = TRUE),
+    sum(ux_version_b$completed_single_sitting == 0,     na.rm = TRUE),
+    sum(ux_version_b$click_through_rate > 0.70,         na.rm = TRUE),
+    sum(ux_version_b$drop_off_item < 50,               na.rm = TRUE),
+    sum(ux_version_b$rt_consistency_sd < 1.5,           na.rm = TRUE),
+    sum(ux_version_b$onset_disengagement < 30,          na.rm = TRUE),
+    sum(ux_version_b$load_time_seconds > 5.0,           na.rm = TRUE),
+    sum(ux_version_b$connectivity_drops > 0,            na.rm = TRUE)
+  )
+) %>%
+  mutate(
+    percentage = (count / 2016 * 100) %>% round(1),
+    flag       = fct_reorder(flag, percentage),
+    label      = paste0(percentage, "%")
+  )
+
+ggplot(flag_summary, aes(x = percentage, y = flag)) +
+  geom_segment(
+    aes(x = 0, xend = percentage, y = flag, yend = flag),
+    colour = "#9b59b6", linewidth = 0.8
+  ) +
+  geom_point(colour = "#5b2c6f", size = 4) +
+  geom_text(
+    aes(label = label),
+    hjust = -0.3, size = 3.5, colour = "grey30"
+  ) +
+  scale_x_continuous(
+    limits = c(0, max(flag_summary$percentage) * 1.2),
+    labels = scales::label_percent(scale = 1)
+  ) +
+  labs(
+    title    = "UX Quality Flag Prevalence - Version B",
+    subtitle = "Percentage of candidates (N = 2016) flagged on each metric",
+    x        = "Percentage Flagged",
+    y        = NULL
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    plot.title       = element_text(face = "bold", size = 14),
+    plot.subtitle    = element_text(colour = "grey50", size = 11),
+    panel.grid.minor = element_blank(),
+    panel.grid.major.y = element_blank()
+  )
+```
+
+### Diagnostic summary
+
+The Version B flag profile demonstrates substantial improvement across nearly all UX metrics. The headline gains are in behavioural engagement: long string responding dropped to 0% (from 4.27%), early onset of disengagement to 0% (from 0.89%), and high click-through rate from 10.81% to just 0.94% — a reduction of over 90%. These improvements are consistent with a shorter, better-paced instrument removing the primary driver of disengagement.
+Platform-side improvements are similarly clear. Loading time flags fell to 0% (from 11.01%) and connectivity drop events reduced from 16.12% to 6.45%, reflecting both load optimisation and the reduced session duration that comes with adaptive delivery.
+Completion rate improved from 11.86% non-completion to 4.12% — a 65% relative reduction — and early drop-off fell from 1.93% to 0.15%. The two metrics that remain elevated are speeding (9.97%, unchanged) and connectivity drops (6.45%), both of which reflect candidate dispositions or infrastructure constraints that UX interventions alone cannot fully resolve.
+
+# Comparison
+
+## Time
+
+The most immediate consequence of CAT-based adaptive delivery is a compression of completion times. Version A shows the characteristic right-skewed distribution of a fixed-form instrument — a healthy central mass with a long tail driven by connectivity issues, session abandonment, and disengagement. Version B simulates the expected shift under adaptive delivery: a tighter, more normally distributed profile centred around a shorter mean, with both extremes reduced. The disappearance of the extreme right tail reflects fewer candidates experiencing prolonged sessions, while the left tail contraction reflects the adjusted speeder threshold calibrated to the shorter instrument.
+
+```{r comparison-time-histogram}
+#| fig-width: 10
+#| fig-height: 5
+# Time comparison - histograms
+
+bind_rows(
+  ux_version_a %>% mutate(Version = "Version A"),
+  ux_version_b %>% mutate(Version = "Version B")
+) %>%
+  ggplot(aes(x = time_taken_seconds, fill = Version, colour = Version)) +
+  geom_histogram(bins = 40, alpha = 0.85) +
+  facet_wrap(~ Version, ncol = 2, scales = "free_y") +
+  scale_fill_manual(values = c(
+    "Version A" = "#3B1F5E",
+    "Version B" = "#C4A8E8"
+  )) +
+  scale_colour_manual(values = c(
+    "Version A" = "#3B1F5E",
+    "Version B" = "#9B70CC"
+  )) +
+  labs(
+    title    = "Completion Time: Version A vs Version B",
+    subtitle = "Distribution of time taken (seconds) across both instrument versions",
+    x        = "Time Taken (seconds)",
+    y        = "Number of Respondents",
+    fill     = NULL, colour = NULL
+  ) +
+  theme_minimal(base_size = 11) +
+  theme(
+    plot.title       = element_text(face = "bold", colour = "#1A1A1A"),
+    plot.subtitle    = element_text(colour = "#888888", size = 9),
+    strip.text       = element_text(face = "bold", colour = "#3B1F5E"),
+    panel.grid.minor = element_blank(),
+    legend.position  = "none",
+    plot.background  = element_rect(fill = "white", colour = NA)
+  )
+```
+
+## Person-Level Variance
+
+Response variance tells a subtler story than time. Where time taken captures behavioural pace, variance captures response authenticity - whether candidates were genuinely differentiating between items or responding indiscriminately. Version B simulates the expected improvement in variance distribution following engagement support interventions: the left tail of near-zero responders shifts rightward, reflecting fewer candidates straight-lining through a shorter, better-paced instrument. The healthy central distribution remains largely intact, as the majority of Version A candidates were already responding meaningfully.
+
+```{r comparison-variance-histogram}
+#| fig-width: 10
+#| fig-height: 5
+# Response Variance comparison - histograms
+
+bind_rows(
+  ux_version_a %>% mutate(Version = "Version A"),
+  ux_version_b %>% mutate(Version = "Version B")
+) %>%
+  ggplot(aes(x = person_sd, fill = Version, colour = Version)) +
+  geom_histogram(bins = 40, alpha = 0.85) +
+  facet_wrap(~ Version, ncol = 2, scales = "free_y") +
+  scale_fill_manual(values = c(
+    "Version A" = "#3B1F5E",
+    "Version B" = "#C4A8E8"
+  )) +
+  scale_colour_manual(values = c(
+    "Version A" = "#3B1F5E",
+    "Version B" = "#9B70CC"
+  )) +
+  labs(
+    title    = "Person-Level Variance: Version A vs Version B",
+    subtitle = "Distribution of response variance across both instrument versions",
+    x        = "Person-Level Variance",
+    y        = "Number of Respondents",
+    fill     = NULL, colour = NULL
+  ) +
+  theme_minimal(base_size = 11) +
+  theme(
+    plot.title       = element_text(face = "bold", colour = "#1A1A1A"),
+    plot.subtitle    = element_text(colour = "#888888", size = 9),
+    strip.text       = element_text(face = "bold", colour = "#3B1F5E"),
+    panel.grid.minor = element_blank(),
+    legend.position  = "none",
+    plot.background  = element_rect(fill = "white", colour = NA)
+  )
+```
+
+## Density Overlaps
+
+Four continuous UX metrics are compared below as density overlays, allowing direct visual comparison of distributional shift between versions. Click-through rate should shift leftward in Version B - fewer candidates rushing. RT consistency SD should shift rightward - more natural variation in pacing. Load time should compress toward zero following platform optimisation. Onset of disengagement should shift rightward and thin out, reflecting fewer candidates hitting a disengagement point and those who do reaching it later in the session.
+
+```{r comparison-density-overlays}
+#| fig-width: 11
+#| fig-height: 8
+# Density Overlay plots
+
+bind_rows(
+  ux_version_a %>% mutate(Version = "Version A"),
+  ux_version_b %>% mutate(Version = "Version B")
+) %>%
+  select(
+    Version,
+    `Click-Through Rate`       = click_through_rate,
+    `RT Consistency SD`        = rt_consistency_sd,
+    `Load Time (seconds)`      = load_time_seconds,
+    `Onset of Disengagement`   = onset_disengagement
+  ) %>%
+  pivot_longer(
+    -Version,
+    names_to  = "Metric",
+    values_to = "Value"
+  ) %>%
+  mutate(
+    Metric = factor(Metric, levels = c(
+      "Click-Through Rate",
+      "RT Consistency SD",
+      "Load Time (seconds)",
+      "Onset of Disengagement"
+    ))
+  ) %>%
+  ggplot(aes(x = Value, fill = Version, colour = Version)) +
+  geom_density(alpha = 0.35, linewidth = 0.7, na.rm = TRUE) +
+  facet_wrap(~ Metric, scales = "free", ncol = 2) +
+  scale_fill_manual(values = c(
+    "Version A" = "#3B1F5E",
+    "Version B" = "#C4A8E8"
+  )) +
+  scale_colour_manual(values = c(
+    "Version A" = "#3B1F5E",
+    "Version B" = "#9B70CC"
+  )) +
+  labs(
+    title    = "UX Metric Distributions: Version A vs Version B",
+    subtitle = "Density overlays across four continuous engagement metrics",
+    x        = "Value",
+    y        = "Density",
+    fill     = NULL, colour = NULL
+  ) +
+  theme_minimal(base_size = 11) +
+  theme(
+    plot.title       = element_text(face = "bold", colour = "#1A1A1A"),
+    plot.subtitle    = element_text(colour = "#888888", size = 9),
+    strip.text       = element_text(face = "bold", colour = "#3B1F5E"),
+    panel.grid.minor = element_blank(),
+    legend.position  = "top",
+    plot.background  = element_rect(fill = "white", colour = NA)
+  )
+```
+
+## UX Metric Shift Plot
+
+The dumbbell chart below provides a single consolidated view of improvement across all eleven UX metrics, comparing flag prevalence between Version A and Version B. Each flag is shown as a connected pair — the dark point representing Version A prevalence and the light point representing Version B. Metrics where the gap between points is largest represent the greatest UX gains from the three interventions. Metrics with little movement reflect either dispositional factors that UX changes cannot address, or infrastructure constraints that require solutions beyond instrument redesign.
+
+```{r comparison-dumbbell}
+#| fig-width: 10
+#| fig-height: 7
+# Dumbbell plot comparison
+
+n_total <- 2016
+
+flag_a <- tibble(
+  flag = c(
+    "Speeder", "Low Variance", "Long String", "Boundary Overuse",
+    "Did Not Complete", "High Click-Through", "Early Drop-Off",
+    "Uniform RT", "Early Disengagement", "Loading Time", "Connectivity Drop"
+  ),
+  pct_a = c(
+    sum(ux_version_a$time_flag == 1,                  na.rm = TRUE),
+    sum(ux_version_a$low_var_flag == 1,               na.rm = TRUE),
+    sum(ux_version_a$longstring_flag == 1,            na.rm = TRUE),
+    sum(ux_version_a$boundary_flag == 1,              na.rm = TRUE),
+    sum(ux_version_a$completed_single_sitting == 0,   na.rm = TRUE),
+    sum(ux_version_a$click_through_rate > 0.70,       na.rm = TRUE),
+    sum(ux_version_a$drop_off_item < 100,             na.rm = TRUE),
+    sum(ux_version_a$rt_consistency_sd < 1.5,         na.rm = TRUE),
+    sum(ux_version_a$onset_disengagement < 60,        na.rm = TRUE),
+    sum(ux_version_a$load_time_seconds > 5.0,         na.rm = TRUE),
+    sum(ux_version_a$connectivity_drops > 0,          na.rm = TRUE)
+  ) / n_total * 100
+)
+
+flag_b <- tibble(
+  flag = c(
+    "Speeder", "Low Variance", "Long String", "Boundary Overuse",
+    "Did Not Complete", "High Click-Through", "Early Drop-Off",
+    "Uniform RT", "Early Disengagement", "Loading Time", "Connectivity Drop"
+  ),
+  pct_b = c(
+    sum(ux_version_b$time_flag == 1,                  na.rm = TRUE),
+    sum(ux_version_b$low_var_flag == 1,               na.rm = TRUE),
+    sum(ux_version_b$longstring_flag == 1,            na.rm = TRUE),
+    sum(ux_version_b$boundary_flag == 1,              na.rm = TRUE),
+    sum(ux_version_b$completed_single_sitting == 0,   na.rm = TRUE),
+    sum(ux_version_b$click_through_rate > 0.70,       na.rm = TRUE),
+    sum(ux_version_b$drop_off_item < 100,             na.rm = TRUE),
+    sum(ux_version_b$rt_consistency_sd < 1.5,         na.rm = TRUE),
+    sum(ux_version_b$onset_disengagement < 60,        na.rm = TRUE),
+    sum(ux_version_b$load_time_seconds > 5.0,         na.rm = TRUE),
+    sum(ux_version_b$connectivity_drops > 0,          na.rm = TRUE)
+  ) / n_total * 100
+)
+
+dumbbell_data <- left_join(flag_a, flag_b, by = "flag") %>%
+  mutate(flag = fct_reorder(flag, pct_a))
+
+ggplot(dumbbell_data) +
+  geom_segment(
+    aes(x = pct_b, xend = pct_a, y = flag, yend = flag),
+    colour = "grey70", linewidth = 1.2
+  ) +
+  geom_point(aes(x = pct_a, y = flag), 
+             colour = "#3B1F5E", size = 4) +
+  geom_point(aes(x = pct_b, y = flag), 
+             colour = "#C4A8E8", size = 4) +
+  geom_text(aes(x = pct_a, y = flag, 
+                label = paste0(round(pct_a, 1), "%")),
+            hjust = -0.4, size = 3.2, colour = "#3B1F5E") +
+  geom_text(aes(x = pct_b, y = flag,
+                label = paste0(round(pct_b, 1), "%")),
+            hjust =  1.4, size = 3.2, colour = "#9B70CC") +
+  scale_x_continuous(
+    limits = c(-2, max(dumbbell_data$pct_a) * 1.25),
+    labels = scales::label_percent(scale = 1)
+  ) +
+  annotate("point", x = 19, y = 3, colour = "#3B1F5E", size = 4) +
+  annotate("text",  x = 20, y = 3, label = "Version A", 
+           hjust = 0, size = 3.2, colour = "#3B1F5E") +
+  annotate("point", x = 19, y = 2, colour = "#C4A8E8", size = 4) +
+  annotate("text",  x = 20, y = 2, label = "Version B", 
+           hjust = 0, size = 3.2, colour = "#9B70CC") +
+  labs(
+    title    = "UX Flag Prevalence: Version A vs Version B",
+    subtitle = "Percentage of candidates flagged on each metric — dark = Version A, light = Version B",
+    x        = "Percentage Flagged",
+    y        = NULL
+  ) +
+  theme_minimal(base_size = 11) +
+  theme(
+    plot.title         = element_text(face = "bold", colour = "#1A1A1A"),
+    plot.subtitle      = element_text(colour = "#888888", size = 9),
+    panel.grid.minor   = element_blank(),
+    panel.grid.major.y = element_blank(),
+    plot.background    = element_rect(fill = "white", colour = NA)
+  )
+```
+
+# Conclusion
+
+UX research is not a finishing touch - it is a design input. The Version A diagnostic presented here demonstrates signficant data quality risk through poor candidate experience. Disengagement, rushing, and connectivity exposure are not random noise; they are predictable, measurable, and addressable through targeted design decisions.
+
+The simulated A/B comparison makes this concrete. Three interventions - adaptive item delivery, platform optimisation, and in-session engagement support - produce measurable improvements across the majority of UX metrics, with the most impactful gains flowing from a single lever: reducing instrument length through CAT. This is not coincidental. Length is the root cause of fatigue, and fatigue is the root cause of most behavioural data quality flags.
+
+The broader principle is that data should inform design, and design should be evaluated against data. The framework demonstrated here - grounding UX simulation in real response quality flags, defining measurable thresholds, and comparing versions against those thresholds - provides a replicable methodology for iterative instrument improvement as AXCESSR moves toward live deployment.
