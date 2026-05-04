@@ -2,7 +2,7 @@
 
 <img width="150" height="150" alt="AXCESSR_logo" src="https://github.com/user-attachments/assets/e00f04a0-dce2-4dc4-942c-2d60c8ea33af" />
 
-## **Introduction**
+**Introduction:**
 
 Three parties make every student-funding decision: the student, the institution, and the lender. None of them have the data they need to make it well.
 
@@ -10,7 +10,7 @@ In South Africa, roughly 68 000 "missing middle" students sit in the gap between
 
 **AXCESSR** addresses this by manufacturing data symmetry across all three parties. It is a psychometric assessment and decision platform that produces a shared, validated signal - derived from four measured psychological domains (personality, values, emotion traits, and emotion states) - that students, Higher Education Institutions (HEIs), and lenders can each act on. Students get evidence of programmatic and career fit before committing time and capital. Institutions get completion-likelihood signals beyond academic records. Lenders get repayment-behaviour predictors that work for thin-file applicants without an established credit history. The same psychometric data point underwrites all three decisions, replacing the fragmented and asymmetric inputs each party currently relies on.
 
-## **Purpose of the Assessment**
+**Purpose of the Assessment:**
 
 The primary objectives of AXCESSR are to:
 
@@ -20,7 +20,7 @@ The primary objectives of AXCESSR are to:
 * Provide lenders with repayment-behaviour predictors validated for thin-file populations
 * Support risk assessment, underwriting, and portfolio management for funders
 
-## How AXCESSR was built
+**How AXCESSR was built:**
 
 AXCESSR was not built with data science as an afterthought. From initial construct mapping and **conceptualisation** through to **data validity** and candidate screening, and into **UX research**, every stage of development was data-informed. The pipeline below illustrates how each phase fed into the next.
 
@@ -32,7 +32,7 @@ The pipeline above illustrates the three core development phases of AXCESSR - co
 
 The first cycle began with construct mapping and item generation, grounded in established psychometric reference scales. Validation followed - reliability analyses, IRT diagnostics, and the removal of 41 problematic items refined the instrument from 247 to 206 items. UX research then surfaced the real-world experience of respondents, closing the loop and opening the next one. Each phase fed the next, with all phases being led by data.
 
-### **1) Conceptualisation**
+# **1) Conceptualisation**
 
 AXCESSR is a psychometric-based credit risk assessment platform designed to extend financial access to individuals overlooked by traditional credit origination methods - either due to limited credit history or an overestimation of risk based on conventional metrics. Rather than relying on historical financial data, the platform evaluates creditworthiness through the measurement of stable personal dispositions shown to predict financial decision-making and repayment behaviour.
 
@@ -44,7 +44,7 @@ Figma Conceptualisation Presentation Link -> https://www.figma.com/deck/BWVGJvpN
 
 The platform targets two primary markets: the student loan market, where millions of academically eligible students lack access to funding, and the broader personal credit market, where thin-file and credit-invisible individuals remain underserved. Psychometric scores can be generated for any candidate irrespective of formal credit history and, because scores are user-generated, they are broadly compliant with consumer privacy regulations.
 
-#### Assessment Architecture
+**Assessment Architecture:**
 
 Four core psychological domains were identified through a review of the behavioural science literature as the constructs most predictive of real-world financial and educational outcomes:
 
@@ -59,7 +59,7 @@ Four core psychological domains were identified through a review of the behaviou
 
 With the domain structure established theoretically, the next challenge was operationalisation - translating abstract constructs into measurable, defensible items
 
-#### Item Development
+**Item Development:**
 
 Item development drew on a structured review of established psychometric frameworks, adapting content from validated instruments across each risk domain. Source instruments included the International Personality Item Pool (IPIP), the HEXACO Personality Inventory, the Schwartz Value Survey (SVS), the Trait Emotional Intelligence Questionnaire (TEIQue), the Short Dark Triad (SD3), the Edwards Compulsive Buying Scale (ECBS), the Barratt Impulsivity Scale, the Sensation Seeking Scale, and the UPPS Impulsive Behaviour Scale.
 
@@ -87,27 +87,27 @@ Each item was engineered to measure a specific construct dimension with precisio
 | **Scoring** | Continuous 0–1, reverse-scored, feeds Emotion Traits domain |
 | **Risk direction** | Higher score = elevated impulsivity risk |
 
-#### From Score to Decision
+**From Score to Decision:**
 
 Item responses aggregate upward through the hierarchy, producing an actionable output at each level.
 
 Item responses → Subfactor score → Factor score → Domain score → Risk profile
 
-### **2) Data Validity**
+# **2) Data Validity**
 
 *Figure 6. Validation Pipeline*
 
 <img width="725" height="247" alt="Validation Pipeline" src="https://github.com/user-attachments/assets/96d90b15-1623-44bb-ac9b-a42a73fd8748" />
 
-#### Validation results
+**Validation results:**
 
 Validation was conducted on the full cleaned dataset (after removing speeders, boundary cases, etc.). An initial EFA showed excellent overall fit but revealed many weak or cross‑loading factors. Domain‑level EFAs indicated that some subfactors were not meaningfully separated statistically. This provided evidence for collapsing certain subfactors into single dimensions and regrouping others into broader factors where the empirical structure diverged from the current specification. CFA models could not be estimated due to non‑positive definite covariance matrices, though the theorised structure was evident in composite-based correlation plots. Reliability analyses indicated that most subfactors fell below the 0.70 threshold, underscoring limited internal consistency.
 
-#### Item removal diagnostics
+**Item removal diagnostics:**
 
 To address these issues, a flat higher‑order CFA was retained as an item‑level diagnostic. Standardised loadings onto higher‑order factors were used as one of three convergent item quality indicators, alongside IRT loadings estimated in isolated subfactor models and corrected item‑total correlations (r.drop). Items with CFA loadings below 0.30, low IRT loadings, and weak r.drop values were flagged as problematic. These diagnostics jointly informed item removal, after which validation analyses were rerun on the reduced set. Convergent evidence across multiple methods led to the removal of 41 items, resulting in a streamlined 206‑item instrument (V2).
 
-**Summary of Problematic items**
+**Summary of Problematic items:**
 
 *Table 2. Summary of Problematic Items*
 
@@ -120,11 +120,11 @@ To address these issues, a flat higher‑order CFA was retained as an item‑lev
 
 The above table summarises the three metrics used to assess the quality of items. Items that were flagged across all three metrics were defined as problematic and removed in V2.
 
-#### Next steps
+**Next steps:**
 
 These findings represent a preliminary validation stage. High‑stakes data are still being collected and will be cross‑referenced with the current results. Final decisions regarding item removal and potential subfactor collapsing will be informed by analyses conducted on the high‑stakes dataset.
 
-#### **Score Stability: Population Stability Index (PSI)**
+**Score Stability: Population Stability Index (PSI):**
 
 A key question following item removal is whether the revised instrument produces materially different risk classifications. The Population Stability Index (PSI) is a metric widely used in credit risk modelling to quantify distributional shift between two scoring populations. A PSI below 0.10 indicates a stable distribution; values between 0.10 and 0.25 indicate moderate shift warranting investigation; values above 0.25 indicate significant drift requiring model review.
 
@@ -158,11 +158,11 @@ The density curves corroborate the PSI findings. For Emotion Traits and Personal
 
 Statistical validity confirms the instrument measures what it claims to. UX research addresses a separate question: will candidates actually engage with it honestly and completely?
 
-### **3) UX Research**
+# **3) UX Research**
 
 Psychometric rigour is a necessary but insufficient condition for a viable assessment product. A well-constructed instrument that candidates disengage from, rush through, or abandon produces compromised data - and compromised data produces unreliable scores. UX research was therefore not a supplementary workstream: it was a data quality intervention. Conducted alongside validation, the research was designed to identify response variability attributable to presentation rather than construct variance - and to use those findings to drive design decisions that optimise the candidate experience and, by extension, the integrity of the data it generates. Every UX metric collected was treated as a signal: evidence of where the instrument was working, where it was creating friction, and where design changes could recover response quality without touching the psychometric structure.
 
-#### A|B Testing
+ **A|B Testing:**
 
 In order to improve response quality, A/B testing was conducted to evaluate the impact of UX-driven changes to the assessment instrument. Version B of the survey was developed by iteratively refining the assessment design based on key UX metrics, with the goal of reducing low-quality responses and improving overall participant engagement. The following quality flags were used to compare performance across both versions:
 
@@ -182,7 +182,7 @@ In order to improve response quality, A/B testing was conducted to evaluate the 
 | Platform Load Time | The average time it takes for each page or item to load. Longer load times can frustrate users and reduce engagement. |
 | Connectivity Drop Events | The number of times users lose connection or experience interruptions during the assessment. Frequent drops can harm the user experience and affect data quality. |
 
-##### Completion Times
+**Completion Times:**
 
 Completion time is a key metric for AXCESSR as it provides a useful lens through which to examine candidate engagement, particularly as the original AXCESSR assessment (Version A) consisted of 247 items. While most respondents worked steadily through the assessment, a subset completed unusually quickly, raising concerns about inattentive responding, whilst other took over 2 hours to complete the assessment. The histogram below illustrates the spread of completion times across the full sample.
 
@@ -192,7 +192,7 @@ Completion time is a key metric for AXCESSR as it provides a useful lens through
 
 Completion times ranged from 39 seconds to nearly two hours (7155 seconds), with a median of 1834 seconds (~30 minutes) and a mean of 2043 seconds (~34 minutes). The central bulk of candidates fell between the first and third quartiles (1372–2525 seconds), indicating a typical completion window of 23–42 minutes. The right‑skewed distribution reflects a small group of candidates who took substantially longer, while the left tail captures the ~10% of speeders flagged for accelerated completion. This pattern underscores that the majority of candidates engaged at a reasonable pace, but a notable minority exhibited atypical response behaviour consistent with low engagement.
 
-##### Version A
+**Version A:**
 
 *Table 5. UX Quality Flag Summary - Version A (N = 2016)*
 
@@ -210,7 +210,7 @@ Completion times ranged from 39 seconds to nearly two hours (7155 seconds), with
 | Loading Time | Average page load time exceeds 5 seconds | 215 | 10.66% |
 | Connectivity Drop | One or more connectivity drop events | 364 | 18.06% |
 
-###### Recommendations
+**Recommendations:**
 
 **1. Adaptive Item Delivery via CAT**
 
@@ -226,7 +226,7 @@ Speeders (9.97%), long string responding (4.27%) and boundary overuse (9.52%) in
 
 These three interventions are not independent. CAT reduces session length, which reduces fatigue, connectivity exposure, and the motivation to rush simultaneously. Platform optimisation reduces the friction that can trigger early drop-off. Engagement support addresses the candidates who would disengage regardless of length. Together they address the full spectrum of UX risk identified in Version A - behavioural, dispositional, and infrastructural.
 
-##### Version B
+**Version B:**
 
 Version B reflects the changes in UX quality metrics following the implementation of recommendations made after Version A.
 
@@ -246,7 +246,7 @@ Version B reflects the changes in UX quality metrics following the implementatio
 | Loading Time | Average page load time exceeds 5 seconds | 0 | 0% |
 | Connectivity Drop | One or more connectivity drop events | 130 | 6.45% |
 
-##### A|B Comparison
+**A|B Comparison:**
 
 The most immediate consequence of CAT-based adaptive delivery is a compression of completion times. Version A shows the characteristic right-skewed distribution of a fixed-form instrument — a healthy central mass with a long tail driven by connectivity issues, session abandonment, and disengagement. Version B simulates the expected shift under adaptive delivery: a tighter, more normally distributed profile centred around a shorter mean, with both extremes reduced. The disappearance of the extreme right tail reflects fewer candidates experiencing prolonged sessions, while the left tail contraction reflects the adjusted speeder threshold calibrated to the shorter instrument.
 
@@ -268,7 +268,7 @@ The dumbbell chart below provides a single consolidated view of improvement acro
 
 Beyond aggregate UX metrics, individual response patterns were examined to identify candidates whose data quality may compromise scoring integrity.
 
-#### **Response Quality Screening**
+**Response Quality Screening:**
 
 An initial sample of N = 2016 candidates completed the assessment. Prior to scoring, all responses were screened for indicators of low engagement using four data-driven criteria: accelerated completion (speeders), invariant responding (low variance), consecutive identical responses (long-string), and extreme endpoint selection (boundary overuse). The following table summarises the findings.
 
@@ -291,7 +291,7 @@ The figure below illustrates the intersection structure of response quality flag
 
 The majority of flagged candidates (144) were caught by the speeder criterion alone, with boundary overuse the second most common single flag (114). Co-occurring flags - where the same candidate triggered multiple criteria independently - account for 114 of the 388 flagged candidates, providing convergent evidence of low engagement in those cases.
 
-#### Comparison
+**Comparison:**
 
 To assess differences in response consistency between groups, the figure below compares person-level variance for respondents flagged on quality checks versus those retained in the clean sample. Examining variability at the individual level provides insight into how consistently participants engaged with the assessment items.
 
@@ -311,7 +311,7 @@ To better understand how flagged respondents differ from the rest of the sample,
 
 This comparison shows that respondents with quality flags exhibit noticeably different score patterns, with several domains displaying irregular or bimodal distributions. In contrast, the clean sample appears more stable and closer to expected distributional shapes. This divergence suggests that flagged responses may introduce noise or distortion, reinforcing the importance of removing or carefully reviewing suspicious respondents to maintain analytical rigor.
 
-### Conclusion
+# Conclusion
 
 AXCESSR was built with data science at the core. Data was embedded from the first stage of construct mapping and held through to the final UX iteration.
 
@@ -325,7 +325,7 @@ The result is an end-to-end development pipeline in which measurement science, s
 
 ---
 
-## References
+# References
 
 [^1]: NSFAS (National Student Financial Aid Scheme) and the Department of Higher Education and Training, Comprehensive Student Funding Model and Missing Middle Loan Funding Programme (announced 2023, ongoing implementation). See SAnews coverage at https://www.sanews.gov.za/south-africa/nzimande-announces-r38bn-funding-missing-middle-students and policy analysis at https://www.universityworldnews.com/post.php?story=20250318114841409. Note: the formally identified missing-middle population (~68,000) reflects the policy-target estimate; broader analyses suggest the true funding-gap population is substantially larger.
 
