@@ -61,7 +61,7 @@ Four core psychological domains were identified through a review of the behaviou
 
 *Figure 4. AXCESSR Structure*
 
-<img width="500" height="300" alt="AXCESSR Structure V2" src="https://github.com/user-attachments/assets/42385684-f9c1-4988-953e-37cf6ff5a297" />
+<img width="400" height="300" alt="AXCESSR Structure V3" src="https://github.com/user-attachments/assets/e6b1358e-0f07-48d6-a170-bb3670a01daa" />
 
 With the domain structure established theoretically, the next challenge was operationalisation - translating abstract constructs into measurable, defensible items
 
