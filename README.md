@@ -6,9 +6,9 @@
 
 Three parties make every student-funding decision: the student, the institution, and the lender. None of them have the data they need to make it well.
 
-In South Africa, roughly 68,000 "missing middle" students sit in the gap between government bursaries (capped at R350,000 household income) and self-funding affordability — and even after recent policy reforms introducing loan funding for the R350K–R600K income band, only about 47% currently receive any support.[^1] South Africa's first-year university dropout rate sits at 35–40%, with financial exclusion and poor programmatic fit consistently identified as primary drivers.[^2] In the United States, the picture is no better: as of December 2025, approximately $180 billion in federal student loans were in default across 7.7 million borrowers, and 29.5% of the active portfolio was delinquent by dollar balance — more than double the pre-pandemic rate.[^3] These outcomes share a common cause: students, higher education institutions, and lenders are all making high-stakes decisions on incomplete and asymmetric information about who will succeed academically and financially.
+In South Africa, roughly 68 000 "missing middle" students sit in the gap between government bursaries (capped at R350,000 household income) and self-funding affordability - and even after recent policy reforms introducing loan funding for the R350K–R600K income band, only about 47% currently receive any support.[^1] South Africa's first-year university dropout rate sits at 35 – 40%, with financial exclusion and poor programmatic fit consistently identified as primary drivers.[^2] In the United States, the picture is no better: as of December 2025, approximately $180 billion in federal student loans were in default across 7.7 million borrowers, and 29.5% of the active portfolio was delinquent by dollar balance - more than double the pre-pandemic rate.[^3] These outcomes share a common cause: students, higher education institutions, and lenders are all making high-stakes decisions on incomplete and asymmetric information about who will succeed academically and financially.
 
-**AXCESSR** addresses this by manufacturing data symmetry across all three parties. It is a psychometric assessment and decision platform that produces a shared, validated signal — derived from four measured psychological domains (personality, values, emotion traits, and emotion states) — that students, HEIs, and lenders can each act on. Students get evidence of programmatic and career fit before committing time and capital. Institutions get completion-likelihood signals beyond academic records. Lenders get repayment-behaviour predictors that work for thin-file applicants without an established credit history. The same psychometric data point underwrites all three decisions, replacing the fragmented and asymmetric inputs each party currently relies on.
+**AXCESSR** addresses this by manufacturing data symmetry across all three parties. It is a psychometric assessment and decision platform that produces a shared, validated signal - derived from four measured psychological domains (personality, values, emotion traits, and emotion states) - that students, Higher Education Institutions (HEIs), and lenders can each act on. Students get evidence of programmatic and career fit before committing time and capital. Institutions get completion-likelihood signals beyond academic records. Lenders get repayment-behaviour predictors that work for thin-file applicants without an established credit history. The same psychometric data point underwrites all three decisions, replacing the fragmented and asymmetric inputs each party currently relies on.
 
 ## **Purpose of the Assessment**
 
@@ -22,13 +22,15 @@ The primary objectives of AXCESSR are to:
 
 ## How AXCESSR was built
 
-AXCESSR was not built with data science as an afterthought. From initial construct mapping through to item validation and candidate screening, every stage of development was data-informed. The pipeline below illustrates how each phase fed into the next.
+AXCESSR was not built with data science as an afterthought. From initial construct mapping and **conceptualisation** through to **data validity** and candidate screening, and into **UX research**, every stage of development was data-informed. The pipeline below illustrates how each phase fed into the next.
 
 *Figure 1. AXCESSR Development Pipeline*
 
 <img width="600" height="500" alt="AXCESSR Development Pipeline V2" src="https://github.com/user-attachments/assets/f8f88d90-b866-4c3d-950c-4d32aa001feb" />
 
-The pipeline above illustrates the three core development phases of AXCESSR - from theoretical construct mapping through to the adaptive decision engine - each phase producing data that informed the next.
+The pipeline above illustrates the three core development phases of AXCESSR - conceptualisation, validation, and UX research - each producing data that feeds the next, and each iteration of the cycle informing a sharper version of the instrument. This is not a linear build. AXCESSR is designed to evolve: findings from validation reshape the item pool, UX research exposes where the assessment places unnecessary burden, and both inform the decisions that define the next iteration - including the move toward a Computerised Adaptive Testing (CAT) engine that shortens assessment time and reduces respondent load without sacrificing measurement precision.
+
+The first cycle began with construct mapping and item generation, grounded in established psychometric reference scales. Validation followed - reliability analyses, IRT diagnostics, and the removal of 41 problematic items refined the instrument from 247 to 206 items. UX research then surfaced the real-world experience of respondents, closing the loop and opening the next one. Each phase fed the next, with all phases being led by data.
 
 ### **1) Conceptualisation**
 
