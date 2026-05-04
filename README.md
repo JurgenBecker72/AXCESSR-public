@@ -2,14 +2,17 @@
 
 <img width="150" height="150" alt="AXCESSR_logo" src="https://github.com/user-attachments/assets/e00f04a0-dce2-4dc4-942c-2d60c8ea33af" />
 
-
 **Introduction:**
 
-Three parties make every student-funding decision: the student, the institution, and the lender. None of them have the data they need to make it well.
+Three parties make every student-funding decision: the student, the institution, and the lender, yet none of them have the data they need to make it well.
 
 In South Africa, roughly 68 000 "missing middle" students sit in the gap between government bursaries (capped at R350,000 household income) and self-funding affordability - and even after recent policy reforms introducing loan funding for the R350K–R600K income band, only about 47% currently receive any support.[^1] South Africa's first-year university dropout rate sits at 35 – 40%, with financial exclusion and poor programmatic fit consistently identified as primary drivers.[^2] In the United States, the picture is no better: as of December 2025, approximately $180 billion in federal student loans were in default across 7.7 million borrowers, and 29.5% of the active portfolio was delinquent by dollar balance - more than double the pre-pandemic rate.[^3] These outcomes share a common cause: students, higher education institutions, and lenders are all making high-stakes decisions on incomplete and asymmetric information about who will succeed academically and financially.
 
 AXCESSR addresses this by manufacturing data symmetry across all three parties. It is a psychometric assessment and decision platform that produces a shared, validated signal - derived from four measured psychological domains (personality, values, emotion traits, and emotion states) - that students, Higher Education Institutions (HEIs), and lenders can each act on. Students get evidence of programmatic and career fit before committing time and capital. Institutions get completion-likelihood signals beyond academic records. Lenders get repayment-behaviour predictors that work for thin-file applicants without an established credit history. The same psychometric data point underwrites all three decisions, replacing the fragmented and asymmetric inputs each party currently relies on.
+
+*Figure 1. AXCESSR Overview*
+
+<img width="1000" height="500" alt="AXCESSR Overview" src="https://github.com/user-attachments/assets/034d5d19-c509-4c79-9119-463f6acf51b3" />
 
 **Purpose of the Assessment:**
 
@@ -25,7 +28,7 @@ The primary objectives of AXCESSR are to:
 
 AXCESSR was not built with data science as an afterthought. From initial construct mapping and **conceptualisation** through to **data validity** and candidate screening, and into **UX research**, every stage of development was data-informed. The pipeline below illustrates how each phase fed into the next.
 
-*Figure 1. AXCESSR Development Pipeline*
+*Figure 2. AXCESSR Development Pipeline*
 
 <img width="600" height="500" alt="AXCESSR Development Pipeline V2" src="https://github.com/user-attachments/assets/f8f88d90-b866-4c3d-950c-4d32aa001feb" />
 
@@ -41,7 +44,7 @@ Figma Conceptualisation Presentation Link -> https://www.figma.com/deck/BWVGJvpN
 
 AXCESSR is a psychometric-based credit risk assessment platform designed to extend financial access to individuals overlooked by traditional credit origination methods - either due to limited credit history or an overestimation of risk based on conventional metrics. Rather than relying on historical financial data, the platform evaluates creditworthiness through the measurement of stable personal dispositions shown to predict financial decision-making and repayment behaviour.
 
-*Figure 2. The Funding Access Gap*
+*Figure 3. The Funding Access Gap*
 
 <img width="368" height="343" alt="image" src="https://github.com/user-attachments/assets/2ea18234-df5a-4bdd-be35-c5864e69655a" />
 
@@ -56,7 +59,7 @@ Four core psychological domains were identified through a review of the behaviou
 - **Emotional Traits** — enduring patterns of emotional responding, including impulsivity and self-regulation
 - **Emotional States** — situational affective tendencies such as stress reactivity and boredom proneness
 
-*Figure 3. AXCESSR Structure*
+*Figure 4. AXCESSR Structure*
 
 <img width="500" height="300" alt="AXCESSR Structure V2" src="https://github.com/user-attachments/assets/42385684-f9c1-4988-953e-37cf6ff5a297" />
 
@@ -68,13 +71,13 @@ Item development drew on a structured review of established psychometric framewo
 
 The below figure illustrates the diverse psychological frameworks and reputable assessment scales that were integrated to develop the AXCESSR item pool, highlighting the foundational instruments that informed its construction
 
-*Figure 4. Frameworks Underpinning the AXCESSR Item Pool Development*
+*Figure 5. Frameworks Underpinning the AXCESSR Item Pool Development*
 
 <img width="1000" height="700" alt="Instrument Design" src="https://github.com/user-attachments/assets/dbdc4bed-83db-49b3-99f0-bf6d39f32f78" />
 
 Every item in the AXCESSR pool traces back to a documented psychological construct. Items were not written opportunistically - each one was derived from a defined theoretical basis and subjected to a structured development pipeline before inclusion in the instrument.
 
-*Figure 5. Item Development Structure*
+*Figure 6. Item Development Structure*
 
 <img width="614" height="414" alt="image" src="https://github.com/user-attachments/assets/cf785e31-070e-4ad7-b0a8-3a25dbd294e2" />
 
@@ -98,7 +101,7 @@ Item responses → Subfactor score → Factor score → Domain score → Risk pr
 
 # **2) Data Validity**
 
-*Figure 6. Validation Pipeline*
+*Figure 7. Validation Pipeline*
 
 <img width="725" height="247" alt="Validation Pipeline" src="https://github.com/user-attachments/assets/96d90b15-1623-44bb-ac9b-a42a73fd8748" />
 
@@ -147,13 +150,13 @@ The PSI results indicate that item removal had minimal impact on candidate risk 
 
 The domain-level breakdown reveals where revision had the most structural impact.
 
-*Figure 7. Population Stability Index (PSI) by Domain*
+*Figure 8. Population Stability Index (PSI) by Domain*
 
 <img width="1000" height="600" alt="psi_bar" src="https://github.com/user-attachments/assets/4bdf8c89-24bb-4ce2-993e-9958f345b302" />
 
 The bar chart confirms that distributional shift is concentrated in the Values domain. All other domains sit comfortably below the stable threshold, and the total weighted risk score sits precisely at the boundary (PSI = 0.10) - indicating that at the overall scoring level, V1 and V2 produce near-equivalent candidate classifications.
 
-*Figure 8. Score Distributions: V1 (247 items) vs V2 (206 items)*
+*Figure 9. Score Distributions: V1 (247 items) vs V2 (206 items)*
 
 <img width="1000" height="600" alt="psi_density" src="https://github.com/user-attachments/assets/9e23745d-a946-49b0-80fe-bd023ae1fe69" />
 
@@ -189,7 +192,7 @@ In order to improve response quality, A/B testing was conducted to evaluate the 
 
 Completion time is a key metric for AXCESSR as it provides a useful lens through which to examine candidate engagement, particularly as the original AXCESSR assessment (Version A) consisted of 247 items. While most respondents worked steadily through the assessment, a subset completed unusually quickly, raising concerns about inattentive responding, whilst other took over 2 hours to complete the assessment. The histogram below illustrates the spread of completion times across the full sample.
 
-*Figure 9. Total Time Taken Distribution*
+*Figure 10. Total Time Taken Distribution*
 
 <img width="550" height="300" alt="image" src="https://github.com/user-attachments/assets/5b74b661-ccc0-4356-b3c8-239162a630b8" />
 
@@ -253,19 +256,19 @@ Version B reflects the changes in UX quality metrics following the implementatio
 
 The most immediate consequence of CAT-based adaptive delivery is a compression of completion times. Version A shows the characteristic right-skewed distribution of a fixed-form instrument — a healthy central mass with a long tail driven by connectivity issues, session abandonment, and disengagement. Version B simulates the expected shift under adaptive delivery: a tighter, more normally distributed profile centred around a shorter mean, with both extremes reduced. The disappearance of the extreme right tail reflects fewer candidates experiencing prolonged sessions, while the left tail contraction reflects the adjusted speeder threshold calibrated to the shorter instrument.
 
-*Figure 10. Completion Time Distribution Comparison*
+*Figure 11. Completion Time Distribution Comparison*
 
 <img width="1245" height="619" alt="image" src="https://github.com/user-attachments/assets/ee7e6539-4b5a-4992-8b85-7226b736a8ea" />
 
 Four continuous UX metrics are compared below as density overlays, allowing direct visual comparison of distributional shift between versions. Click-through rate should shift leftward in Version B - fewer candidates rushing. RT consistency SD should shift rightward - more natural variation in pacing. Load time should compress toward zero following platform optimisation. Onset of disengagement should shift rightward and thin out, reflecting fewer candidates hitting a disengagement point and those who do reaching it later in the session.
 
-*Figure 11. UX Metric Distribution Comparison*
+*Figure 12. UX Metric Distribution Comparison*
 
 <img width="2112" height="1536" alt="image" src="https://github.com/user-attachments/assets/b88fc0e9-8139-404b-ab25-7dd619614f87" />
 
 The dumbbell chart below provides a single consolidated view of improvement across all eleven UX metrics, comparing flag prevalence between Version A and Version B. Each flag is shown as a connected pair — the dark point representing Version A prevalence and the light point representing Version B. Metrics where the gap between points is largest represent the greatest UX gains from the three interventions. Metrics with little movement reflect either dispositional factors that UX changes cannot address, or infrastructure constraints that require solutions beyond instrument redesign.
 
-*Figure 12. UX Flag Prevalence Comparison*
+*Figure 13. UX Flag Prevalence Comparison*
 
 <img width="1920" height="1344" alt="image" src="https://github.com/user-attachments/assets/04596745-9d24-43b0-a352-caed30c9d089" />
 
@@ -288,7 +291,7 @@ An initial sample of N = 2016 candidates completed the assessment. Prior to scor
 
 The figure below illustrates the intersection structure of response quality flags across the 388 flagged candidates. Each bar represents a unique combination of criteria, with bar height indicating the number of candidates flagged by that particular combination.
 
-*Figure 13. Intersection of Response Quality Flags Across Flagged Candidates*
+*Figure 14. Intersection of Response Quality Flags Across Flagged Candidates*
 
 <img width="787" height="486" alt="image" src="https://github.com/user-attachments/assets/a6fd24f8-7957-48cd-82c6-04a89e086db6" />
 
@@ -298,7 +301,7 @@ The majority of flagged candidates (144) were caught by the speeder criterion al
 
 To assess differences in response consistency between groups, the figure below compares person-level variance for respondents flagged on quality checks versus those retained in the clean sample. Examining variability at the individual level provides insight into how consistently participants engaged with the assessment items.
 
-*Figure 14. Comparison of Person-Level Variance in the Flagged and Clean Sample*
+*Figure 15. Comparison of Person-Level Variance in the Flagged and Clean Sample*
 
 | Person-Level Variance in the Flagged Sample (N = 388) | Person-Level Variance in the Clean Sample (N = 1628) |
 |--------|--------|
@@ -308,7 +311,7 @@ The flagged sample (N = 388) shows a broader and more irregular spread of person
 
 To better understand how flagged respondents differ from the rest of the sample, the figure below compares score distributions across key domains. Density curves are shown for both clean and flagged groups, allowing for a direct visual comparison of their response patterns.
 
-*Figure 15. Comparison of Score Distributions Between the Flagged and Clean Sample*
+*Figure 16. Comparison of Score Distributions Between the Flagged and Clean Sample*
 
 <img width="787" height="486" alt="image" src="https://github.com/user-attachments/assets/07d91c35-5a24-4667-9f1b-fc0b9e4d2e8b" />
 
