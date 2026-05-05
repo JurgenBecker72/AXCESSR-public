@@ -73,7 +73,7 @@ The below figure illustrates the diverse psychological frameworks and reputable 
 
 *Figure 5. Frameworks Underpinning the AXCESSR Item Pool Development*
 
-<img width="1000" height="700" alt="Instrument Design" src="https://github.com/user-attachments/assets/dbdc4bed-83db-49b3-99f0-bf6d39f32f78" />
+<img width="700" height="500" alt="Instrument Design" src="https://github.com/user-attachments/assets/dbdc4bed-83db-49b3-99f0-bf6d39f32f78" />
 
 Every item in the AXCESSR pool traces back to a documented psychological construct. Items were not written opportunistically - each one was derived from a defined theoretical basis and subjected to a structured development pipeline before inclusion in the instrument.
 
