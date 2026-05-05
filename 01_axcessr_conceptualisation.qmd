@@ -94,7 +94,7 @@ phase fed into the next.
 
 *AXCESSR Development Pipeline*
 
-<img src="https://github.com/user-attachments/assets/f8f88d90-b866-4c3d-950c-4d32aa001feb" alt="AXCESSR Development Pipeline V2" width="600" height="500"/>
+<img width="600" height="500" alt="AXCESSR Development Pipeline V3" src="https://github.com/user-attachments/assets/7316ba5f-ab61-4b6b-86af-b7b739a0c02f" />
 
 The pipeline above illustrates the three core development phases of
 AXCESSR - *conceptualisation*, *validation*, and *UX research* - each
