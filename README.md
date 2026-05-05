@@ -12,7 +12,7 @@ AXCESSR addresses this by manufacturing data symmetry across all three parties. 
 
 *Figure 1. AXCESSR Overview*
 
-<img width="700" height="400" alt="AXCESSR Overview" src="https://github.com/user-attachments/assets/034d5d19-c509-4c79-9119-463f6acf51b3" />
+<img width="600" height="350" alt="AXCESSR Overview" src="https://github.com/user-attachments/assets/034d5d19-c509-4c79-9119-463f6acf51b3" />
 
 **Purpose of the Assessment:**
 
