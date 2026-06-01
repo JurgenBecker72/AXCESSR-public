@@ -2,22 +2,26 @@ project:
   type: website
   output-dir: docs
   render:
-    - index.qmd
-    - 01_axcessr_data_validity.qmd
-    - 02_axcessr_ux_research.qmd
+    - 01_axcessr_conceptualisation.qmd
+    - 02_axcessr_data_validity.qmd
+    - 03_axcessr_ux_research.qmd
 
 execute:
   freeze: auto
 
+
 website:
   title: "AXCESSR Showcase"
-  navbar:
-    left:
-      - text: "Data Validity"
-        href: 01_axcessr_data_validity.html
-      - text: "UX Research"
-        href: 02_axcessr_ux_research.html
-
+  sidebar:
+    style: "floating"
+    search: false
+    contents:
+      - text: "1) Conceptualisation"
+        href: 01_axcessr_conceptualisation.html
+      - text: "2) Data Validity"
+        href: 02_axcessr_data_validity.html
+      - text: "3) UX Research"
+        href: 03_axcessr_ux_research.html
 
 format:
   html:
